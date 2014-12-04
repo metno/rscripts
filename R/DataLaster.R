@@ -47,6 +47,22 @@ Dogn.Laster2 <- function(StNr=18700, elementer = c("TAM","TAX","TAN"), FD = "01.
   Dataserie
 }
 
+Dogn.Laster.flag <- function(StNr=18700, elementer = c("TAM","TAX","TAN"), FD = "01.01.2003", TD = "31.12.2003", Nod="NA"){
+#Reads daily useflags
+#http://klapp.oslo.dnmi.no/metnopub/production/metno?re=14&p=TAM&p=TAN&p=TAX&fd=13.11.2002&td=12.12.2004&ddel=dot&del=space&ct=text/plain&s=18700&nod=NA&split=1
+  if (is.numeric(TD)){TD = paste("31.12.",TD,sep="")}
+  if (is.numeric(FD)){FD = paste("01.01.",FD,sep="")}
+  del1 <- "http://klapp.oslo.dnmi.no/metnopub/production/metno?re=14&ct=text/plain&del=semicolon&ddel=comma&split=1&flag=10"
+  del1 <- paste(del1,"&nod=",Nod,sep="")
+  for (n in 1:length(StNr)){del1 <- paste(del1,"&s=",StNr[n],sep="")}
+  del1 <- paste(del1,"&fd=",FD,"&td=",TD,sep="")
+  for (n in 1:length(elementer)){del1 <- paste(del1,"&p=",elementer[n],sep="")}
+#  print(del1)
+#  Dataserie <- read.table(del1, header = TRUE, sep = ";",  dec = ",", na.strings = "NA", skip=1, colClasses="numeric")
+  Dataserie <- read.table(del1, header = TRUE, sep = ";",  dec = ",", na.strings = "NA", skip=0, colClasses="numeric", stringsAsFactors=FALSE)
+  Dataserie
+}
+
 Maaned.Laster <- function(StNr=18700, elementer = c("TAM","TAX","TAN"), FD = "01.01.2003", TD = "31.12.2003"){
 #Reads monthly values
 #http://klapp.oslo.dnmi.no/metnopub/production/metno?re=15&p=TAM&p=TAN&p=TAX&fd=13.11.2002&td=12.12.2004&ddel=dot&del=space&ct=text/plain&s=18700&nod=NA&split=1
