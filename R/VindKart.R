@@ -9,14 +9,21 @@ require(rgdal)
 require(sp)
 require(RgoogleMaps)
 
-VindKart <- function(FD="15.11.2013",TD="17.11.2013",elementer="FFX",Stasjoner=NA,center= c(61, 8)){
+#Sources i R via kommandoen:
+#require(devtools)
+#source_url("https://raw.githubusercontent.com/metno/rscripts/master/R/VindKart.R")
+
+VindKart <- function(FD="15.11.2013",TD="17.11.2013",elementer="FFX",Stasjoner=NA,center= c(61, 8)){ 
+  #FFX gir høyeste middelvind, mens FGX gir høyeste vindkast
+  #center= c(64.5, 10) #Trøndelag
+  #center= c(61, 8) #Sørnorge
+  #Stasjoner kan settes eksplisitt om en ønsker et spesielt utvalg, ellers hentes det dynamisk inn for alle stasjoner som har observert på tidspunktet
+  zoom=6 #Kan justeres for å sette ulike utsnitt, men er ikk trinnløs
+
   Aar <- substr(FD,7,10)
   if (is.na(Stasjoner)){Stasjoner<- Stasjon.Laster(elementer=elementer,FY=Aar,TY=Aar)}
   St <- Stasjoner[,c(6,10,11)]
   ls <- length(St[,1])
-  #center= c(64.5, 10) #Trøndelag
-  #center= c(61, 8) #Sørnorge
-  zoom=6
   Kart <- GetMap(center=center, zoom=zoom, destfile = "kart.png")
   tmp <- PlotOnStaticMap(Kart, lat = 0, lon = 0, destfile = "Kart1.png", cex=1.5,pch=20, add=FALSE)
   
@@ -30,7 +37,7 @@ VindKart <- function(FD="15.11.2013",TD="17.11.2013",elementer="FFX",Stasjoner=N
     if(length(Data>0)){
       if(elementer=="FFX"){
         VindMaks <- max(c(max(c(as.numeric(Data[,5]),na.rm=TRUE)),max(c(as.numeric(Data[,6]),na.rm=TRUE))),na.rm=TRUE)
-      #Farver
+      #Farver settes her for middelvind, grenser i m/s
         Farge<-"gray19"
         if (VindMaks > 32.6){Farge="darkred"}
         if (VindMaks > 28.4 & VindMaks<32.7){Farge="Purple"}
@@ -40,7 +47,7 @@ VindKart <- function(FD="15.11.2013",TD="17.11.2013",elementer="FFX",Stasjoner=N
       }
       if(elementer=="FGX"){
         VindMaks <- max(c(max(as.numeric(Data[,5]),na.rm=TRUE)),na.rm=TRUE)
-        #Farver
+        #Farver  settes her for vindkast, grenser i m/s
         Farge<-"gray19"
         #      if (VindMaks > 32.6*1.3){Farge="darkred"}
         #      if (VindMaks > 28.4*1.3 & VindMaks<32.7*1.3){Farge="Purple"}
