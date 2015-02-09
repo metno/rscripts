@@ -95,6 +95,31 @@ Stasjon.Laster <- function(elementer="TAM", FY = 1971, TY = 2000){
 Obs.Laster <- function(StNr=18700, elementer = c("TA"), FD = "01.01.2003", TD = "31.12.2003", tider=c(0,6,12,18), Auto=1){
 #Reads the observations
   #http://klapp.oslo.dnmi.no/metnopub/production/metno?re=17&p=VV&fd=13.11.2003&td=12.12.2003&h=0&h=6&nmt=0&ddel=dot&del=;&ct=text/plain&x=1&s=18700&nod=NAN
+  del1 <- "http://klapp.oslo.dnmi.no/metnopub/production/metno?re=17&nmt=0&ddel=dot&del=semicolon&ct=text/plain&x=1&nod=NA&qa=5"
+  if (is.numeric(TD)){TD = paste("31.12.",TD,sep="")}
+  if (is.numeric(FD)){FD = paste("01.01.",FD,sep="")}
+  if (Auto==1){del1 <- paste(del1,"&dup=A",sep="")}
+  if (Auto!=1){del1 <- paste(del1,"&dup=V",sep="")}
+  for (n in 1:length(StNr)){del1 <- paste(del1,"&s=",StNr[n],sep="")}
+  del1 <- paste(del1,"&fd=",FD,"&td=",TD,sep="")
+  for (n in 1:length(elementer)){del1 <- paste(del1,"&p=",elementer[n],sep="")}
+  for (n in 1:length(tider)){del1 <- paste(del1,"&h=",tider[n],sep="")}
+#  print(del1)
+#  Datasett <- read.table(del1, header = TRUE, sep = ";",  dec = ".", na.strings = "NA", skip=2,colClasses="numeric")
+  Datasett <- read.table(del1, header = TRUE, sep = ";",  dec = ".", na.strings = "NA", skip=0,colClasses="numeric", stringsAsFactors=FALSE)
+#  Datasett <- read.table(del1, header = TRUE, sep = ";",  dec = ".", na.strings = "NA", skip=3,colClasses="numeric")
+  #print(del1)
+  if (Datasett[1,1]=="Stnr"){LD <- length(Datasett[,1]);Datasett <- Datasett[2:LD,]}
+  LElem <- length(elementer)
+  D2<-Datasett[,1:5]
+  for (n in 1:LElem){
+    D2 <- cbind(D2,as.numeric(Datasett[,(n+5)]))}
+  D2
+}
+
+Obs.Laster.Complete <- function(StNr=18700, elementer = c("TA"), FD = "01.01.2003", TD = "31.12.2003", tider=c(0,6,12,18), Auto=1){
+#Reads the observations
+  #http://klapp.oslo.dnmi.no/metnopub/production/metno?re=17&p=VV&fd=13.11.2003&td=12.12.2003&h=0&h=6&nmt=0&ddel=dot&del=;&ct=text/plain&x=1&s=18700&nod=NAN
   del1 <- "http://klapp.oslo.dnmi.no/metnopub/production/metno?re=17&nmt=0&ddel=dot&del=semicolon&ct=text/plain&x=1&nod=NA"
   if (is.numeric(TD)){TD = paste("31.12.",TD,sep="")}
   if (is.numeric(FD)){FD = paste("01.01.",FD,sep="")}
