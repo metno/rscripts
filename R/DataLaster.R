@@ -9,6 +9,7 @@
 
 #https://dokit.met.no/klima/userservices/urlinterface
 #https://dokit.met.no/klima/userservices/urlinterface/brukerdok
+#http://metklim.met.no/klima/userservices/urlinterface/brukerdok
 
 Dogn.Laster <- function(StNr=18700, elementer = c("TAM","TAX","TAN"), FD = "01.01.2003", TD = "31.12.2003", Nod="NA"){
 #Reads daily values
