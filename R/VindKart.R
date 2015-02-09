@@ -13,6 +13,20 @@ require(RgoogleMaps)
 #require(devtools)
 #source_url("https://raw.githubusercontent.com/metno/rscripts/master/R/VindKart.R")
 
+#For a set of tiles that give a national coverage the setup for extreme weather "Ole" might be used:
+#Southern Norway
+#VindKart(FD="07.02.2015",TD="08.02.2015",center=c(61,8),elementer="FFX")
+#VindKart(FD="07.02.2015",TD="08.02.2015",center=c(61,8),elementer="FGX")
+#Nordland
+#VindKart(FD="07.02.2015",TD="08.02.2015",center=c(66,14),elementer="FGX")
+#VindKart(FD="07.02.2015",TD="08.02.2015",center=c(66,14),elementer="FFX")
+#Troms
+#VindKart(FD="07.02.2015",TD="08.02.2015",center=c(69,18),elementer="FFX")
+#VindKart(FD="07.02.2015",TD="08.02.2015",center=c(69,18),elementer="FGX")
+#Finnmark
+#VindKart(FD="07.02.2015",TD="08.02.2015",center=c(69,25),elementer="FGX")
+#VindKart(FD="07.02.2015",TD="08.02.2015",center=c(69,25),elementer="FFX")
+
 VindKart <- function(FD="15.11.2013",TD="17.11.2013",elementer="FFX",Stasjoner=NA,center= c(61, 8)){ 
   #FFX gir høyeste middelvind, mens FGX gir høyeste vindkast
   #center= c(64.5, 10) #Trøndelag
