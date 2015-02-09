@@ -35,7 +35,13 @@ VindKart <- function(FD="15.11.2013",TD="17.11.2013",elementer="FFX",Stasjoner=N
   zoom=6 #Kan justeres for å sette ulike utsnitt, men er ikk trinnløs
 
   Aar <- substr(FD,7,10)
-  if (is.na(Stasjoner)){Stasjoner<- Stasjon.Laster(elementer=elementer,FY=Aar,TY=Aar)}
+  if (is.na(Stasjoner)){Stasjoner<- Stasjon.Laster(elementer=elementer,FY=Aar,TY=Aar)
+    Sperrede <- c(89920, 86070) #put station nuber of stations that shall be excluded here
+    LS <- length(Sperrede)
+    for (n in LS){
+      Stasjoner <- Stasjoner[Stasjoner[,6]!=Sperrede[n],]
+    }
+  }
   St <- Stasjoner[,c(6,10,11)]
   ls <- length(St[,1])
   Kart <- GetMap(center=center, zoom=zoom, destfile = "kart.png")
