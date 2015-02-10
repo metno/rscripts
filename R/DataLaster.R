@@ -104,7 +104,7 @@ Obs.Laster <- function(StNr=18700, elementer = c("TA"), FD = "01.01.2003", TD = 
   del1 <- paste(del1,"&fd=",FD,"&td=",TD,sep="")
   for (n in 1:length(elementer)){del1 <- paste(del1,"&p=",elementer[n],sep="")}
   for (n in 1:length(tider)){del1 <- paste(del1,"&h=",tider[n],sep="")}
-#  print(del1)
+  print(del1)
 #  Datasett <- read.table(del1, header = TRUE, sep = ";",  dec = ".", na.strings = "NA", skip=2,colClasses="numeric")
   Datasett <- read.table(del1, header = TRUE, sep = ";",  dec = ".", na.strings = "NA", skip=0, stringsAsFactors=FALSE)
 #  Datasett <- read.table(del1, header = TRUE, sep = ";",  dec = ".", na.strings = "NA", skip=3,colClasses="numeric")
