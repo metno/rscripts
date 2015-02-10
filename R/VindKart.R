@@ -48,7 +48,7 @@ VindKart <- function(FD="15.11.2013",TD="17.11.2013",elementer="FFX",Stasjoner=N
   tmp <- PlotOnStaticMap(Kart, lat = 0, lon = 0, destfile = "Kart1.png", cex=1.5,pch=20, add=FALSE)
   
   for (n in 1:ls){
-    print(St[n,1])
+    #print(St[n,1])
     Data<-c()
     if(elementer=="FFX"){try(Data <- Dogn.Laster(StNr=St[n,1],FD=FD,TD=TD,elementer=c("FFX","FXX")),silent=TRUE)}
     if(elementer=="FGX"){try(Data <- Dogn.Laster(StNr=St[n,1],FD=FD,TD=TD,elementer=c("FGX")),silent=TRUE)}
