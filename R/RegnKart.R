@@ -27,7 +27,7 @@ require(RgoogleMaps)
 #VindKart(FD="07.02.2015",TD="08.02.2015",center=c(69,25),elementer="FGX")
 #VindKart(FD="07.02.2015",TD="08.02.2015",center=c(69,25),elementer="FFX")
 
-VindKart <- function(FD="15.11.2013",TD="17.11.2013",elementer="FFX",Stasjoner=NA,center= c(61, 8),zoom=6){ 
+VindKart <- function(FD="15.11.2013",TD="17.11.2013",elementer="FFX",Stasjoner=NA,center= c(61, 8),zoom=6,MinGrense=NA){ 
   #FFX gir høyeste middelvind, mens FGX gir høyeste vindkast
   #center= c(64.5, 10) #Trøndelag
   #center= c(61, 8) #Sørnorge
