@@ -92,7 +92,7 @@ VindKart <- function(FD="15.11.2013",TD="17.11.2013",elementer="FFX",Stasjoner=N
         #      if (VindMaks > 20.7*1.3 & VindMaks<24.5*1.3){Farge="darkgreen"}
         Startpunkt <- 0
         if(!is.na(MinGrense)){Startpunkt<-MinGrense}
-        if (VindMaks > (100+Startpunkt)){Farge="black"}
+        if (VindMaks > (100+Startpunkt)){Farge="darkred"}
         if (VindMaks >= (75+Startpunkt) & VindMaks<(100+Startpunkt)){Farge="Purple"}
         if (VindMaks >= (50+Startpunkt) & VindMaks<(75+Startpunkt)){Farge="darkblue"}
         if (VindMaks >= (25+Startpunkt) & VindMaks<(50+Startpunkt)){Farge="darkgreen"}
