@@ -16,7 +16,7 @@ require(RgoogleMaps)
 RegnKart <- function(FD="24.09.2015",TD="17.09.2015",elementer="RR",Stasjoner=NA,center= c(61, 8),zoom=7){
   Aar <- substr(FD,7,10)
   if (is.na(Stasjoner)){Stasjoner<- Stasjon.Laster(elementer=elementer,FY=Aar,TY=Aar)}
-  Stasjoner <- Stasjoner[Stasjoner[,6]!=Sperrede[n],]
+  Stasjoner <- Stasjoner[Stasjoner[,6]<99999,]
   St <- Stasjoner[,c(6,10,11)]
   print(St)
   ls <- length(St[,1])
