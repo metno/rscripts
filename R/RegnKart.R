@@ -89,10 +89,10 @@ VindKart <- function(FD="15.11.2013",TD="17.11.2013",elementer="FFX",Stasjoner=N
         #      if (VindMaks > 28.4*1.3 & VindMaks<32.7*1.3){Farge="Purple"}
         #      if (VindMaks > 24.4*1.3 & VindMaks<28.5*1.3){Farge="darkblue"}
         #      if (VindMaks > 20.7*1.3 & VindMaks<24.5*1.3){Farge="darkgreen"}
-        if (VindMaks > 44.9){Farge="darkred"}
-        if (VindMaks > 39.9 & VindMaks<45){Farge="Purple"}
-        if (VindMaks > 34.9 & VindMaks<40){Farge="darkblue"}
-        if (VindMaks > 29.9 & VindMaks<35){Farge="darkgreen"}
+        if (VindMaks > 100){Farge="black"}
+        if (VindMaks >= 75 & VindMaks<100){Farge="Purple"}
+        if (VindMaks >= 50 & VindMaks<75){Farge="darkblue"}
+        if (VindMaks >= 25 & VindMaks<50){Farge="darkgreen"}
       }
 #      TextOnStaticMap(Kart,lon=as.numeric(St$LON_DEC[n]),lat=as.numeric(St$LAT_DEC[n]),col='red',labels=VindMaks,adj=c(+1.5),cex=0.5,add=TRUE)
       if(is.finite(VindMaks)){
