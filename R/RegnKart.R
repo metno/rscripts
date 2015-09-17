@@ -11,7 +11,7 @@ require(RgoogleMaps)
 
 #Sources i R via kommandoen:
 #require(devtools)
-#source_url("https://raw.githubusercontent.com/metno/rscripts/master/R/VindKart.R")
+#source_url("https://raw.githubusercontent.com/metno/rscripts/master/R/RegnKart.R")
 
 #For a set of tiles that give a national coverage the setup for extreme weather "Ole" might be used:
 #Southern Norway
