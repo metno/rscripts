@@ -97,7 +97,9 @@ VindKart <- function(FD="15.11.2013",TD="17.11.2013",elementer="FFX",Stasjoner=N
       }
 #      TextOnStaticMap(Kart,lon=as.numeric(St$LON_DEC[n]),lat=as.numeric(St$LAT_DEC[n]),col='red',labels=VindMaks,adj=c(+1.5),cex=0.5,add=TRUE)
       if(is.finite(VindMaks)){
-        TextOnStaticMap(Kart,lon=as.numeric(St$LON_DEC[n]),lat=as.numeric(St$LAT_DEC[n]),col=Farge,labels=VindMaks,cex=0.7,add=TRUE)
+        if(is.na(MinGrense)|VindMaks>=MinGrense{
+          TextOnStaticMap(Kart,lon=as.numeric(St$LON_DEC[n]),lat=as.numeric(St$LAT_DEC[n]),col=Farge,labels=VindMaks,cex=0.7,add=TRUE)
+        }
       }
     }
   }
