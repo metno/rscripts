@@ -81,6 +81,7 @@ VindKart <- function(FD="15.11.2013",TD="17.11.2013",elementer="FFX",Stasjoner=N
         if (VindMaks > 29.9 & VindMaks<35){Farge="darkgreen"}
       }
       if(elementer=="RR"){
+        Data[Data[,5]<0,5]<-0
         VindMaks <- sum(c(sum(as.numeric(Data[,5]),na.rm=TRUE)),na.rm=TRUE)
         #Farver  settes her for vindkast, grenser i m/s
         Farge<-"gray19"
