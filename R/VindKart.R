@@ -27,12 +27,12 @@ require(RgoogleMaps)
 #VindKart(FD="07.02.2015",TD="08.02.2015",center=c(69,25),elementer="FGX")
 #VindKart(FD="07.02.2015",TD="08.02.2015",center=c(69,25),elementer="FFX")
 
-VindKart <- function(FD="15.11.2013",TD="17.11.2013",elementer="FFX",Stasjoner=NA,center= c(61, 8)){ 
+VindKart <- function(FD="15.11.2013",TD="17.11.2013",elementer="FFX",Stasjoner=NA,center= c(61, 8),zoom=6){ 
   #FFX gir høyeste middelvind, mens FGX gir høyeste vindkast
   #center= c(64.5, 10) #Trøndelag
   #center= c(61, 8) #Sørnorge
   #Stasjoner kan settes eksplisitt om en ønsker et spesielt utvalg, ellers hentes det dynamisk inn for alle stasjoner som har observert på tidspunktet
-  zoom=6 #Kan justeres for å sette ulike utsnitt, men er ikk trinnløs
+  #zoom=6 #Kan justeres for å sette ulike utsnitt, men er ikk trinnløs
 
   Aar <- substr(FD,7,10)
   if (is.na(Stasjoner)){Stasjoner<- Stasjon.Laster(elementer=elementer,FY=Aar,TY=Aar)
