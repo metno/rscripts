@@ -1,3 +1,7 @@
+#Sources i R via kommandoen:
+#require(devtools)
+#source_url("https://raw.githubusercontent.com/metno/rscripts/master/R/RegnKart.R")
+
 require(devtools)
 source_url("https://raw.githubusercontent.com/metno/rscripts/master/R/DataLaster.R")
 require(maps)
@@ -9,7 +13,7 @@ require(rgdal)
 require(sp)
 require(RgoogleMaps)
 
-RegnKart <- function(FD="28.10.2014",TD="29.10.2014",elementer="RR",Stasjoner=NA){
+RegnKart <- function(FD="24.09.2015",TD="17.09.2015",elementer="RR",Stasjoner=NA,center= c(61, 8),zoom=7){
   Aar <- substr(FD,7,10)
   if (is.na(Stasjoner)){Stasjoner<- Stasjon.Laster(elementer=elementer,FY=Aar,TY=Aar)}
   Stasjoner <- Stasjoner[Stasjoner[,6]!=Sperrede[n],]
@@ -17,9 +21,9 @@ RegnKart <- function(FD="28.10.2014",TD="29.10.2014",elementer="RR",Stasjoner=NA
   print(St)
   ls <- length(St[,1])
   #center= c(64.5, 10) #Trøndelag
-  center= c(61, 8) #Sørnorge
-  center= c(61, 5) #Sørnorge
-  zoom=7
+#  center= c(61, 8) #Sørnorge
+#  center= c(61, 5) #Sørnorge
+#  zoom=7
   Kart <- GetMap(center=center, zoom=zoom, destfile = "kart.png")
   tmp <- PlotOnStaticMap(Kart, lat = 0, lon = 0, destfile = "Kart1.png", cex=1.5,pch=20, add=FALSE)
   
