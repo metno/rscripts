@@ -84,7 +84,8 @@ Stasjon.Laster <- function(elementer="TAM", FY = 1971, TY = 2000){
   #http://klapp.oslo.dnmi.no/metnopub/production/metno?re=16&ct=text/plain&p=TAM&TY=2000&FY=1971
   #http://klapp.oslo.dnmi.no/metnopub/production/metno?re=16&ct=text/plain&p=TAM&FY=1961&TY=1990
   del1 <- "http://klapp.oslo.dnmi.no/metnopub/production/metno?re=16&ct=text/plain&del=semicolon"
-  for (n in 1:length(elementer)){del1 <- paste(del1,"&p=",elementer[n],sep="")}
+#  for (n in 1:length(elementer)){del1 <- paste(del1,"&p=",elementer[n],sep="")}
+  for (n in 1:length(elementer)){del1 <- paste(del1,"&tab=",elementer[n],sep="")}
   #del1 <- paste(del1,"&fy=",FY,sep="")
   del1 <- paste(del1,"&FY=",FY,"&TY=",TY,sep="")
   #print(del1)
