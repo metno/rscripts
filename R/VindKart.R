@@ -41,7 +41,7 @@ VindKart <- function(FD="15.11.2013",TD="17.11.2013",elementer="FFX",Stasjoner=N
     for (n in LS){
       Stasjoner <- Stasjoner[Stasjoner[,6]!=Sperrede[n],]
     }
-    Stasjoner <- Stasjoner[Stasjoner[,6]<=99999
+    Stasjoner <- Stasjoner[Stasjoner[,6]<=99999,]
   }
   St <- Stasjoner[,c(6,10,11)]
   ls <- length(St[,1])
