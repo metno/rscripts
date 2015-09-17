@@ -27,7 +27,7 @@ require(RgoogleMaps)
 #VindKart(FD="07.02.2015",TD="08.02.2015",center=c(69,25),elementer="FGX")
 #VindKart(FD="07.02.2015",TD="08.02.2015",center=c(69,25),elementer="FFX")
 
-VindKart <- function(FD="15.11.2013",TD="17.11.2013",elementer="FFX",Stasjoner=NA,center= c(61, 8),zoom=6,MinGrense=NA){ 
+VindKart <- function(FD="15.11.2013",TD="17.11.2013",elementer="FFX",Stasjoner=NA,center= c(61, 8),zoom=6){ 
   #FFX gir høyeste middelvind, mens FGX gir høyeste vindkast
   #center= c(64.5, 10) #Trøndelag
   #center= c(61, 8) #Sørnorge
@@ -96,9 +96,7 @@ VindKart <- function(FD="15.11.2013",TD="17.11.2013",elementer="FFX",Stasjoner=N
       }
 #      TextOnStaticMap(Kart,lon=as.numeric(St$LON_DEC[n]),lat=as.numeric(St$LAT_DEC[n]),col='red',labels=VindMaks,adj=c(+1.5),cex=0.5,add=TRUE)
       if(is.finite(VindMaks)){
-        if(is.na(MinGrense) | VindMaks >= MinGrense){
-          TextOnStaticMap(Kart,lon=as.numeric(St$LON_DEC[n]),lat=as.numeric(St$LAT_DEC[n]),col=Farge,labels=VindMaks,cex=0.7,add=TRUE)
-        }
+        TextOnStaticMap(Kart,lon=as.numeric(St$LON_DEC[n]),lat=as.numeric(St$LAT_DEC[n]),col=Farge,labels=VindMaks,cex=0.7,add=TRUE)
       }
     }
   }
