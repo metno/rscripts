@@ -27,7 +27,7 @@ require(RgoogleMaps)
 #VindKart(FD="07.02.2015",TD="08.02.2015",center=c(69,25),elementer="FGX")
 #VindKart(FD="07.02.2015",TD="08.02.2015",center=c(69,25),elementer="FFX")
 
-VindKart <- function(FD="15.11.2013",TD="17.11.2013",elementer="FFX",Stasjoner=NA,center= c(61, 8),zoom=6,MinGrense=NA){ 
+VindKart <- function(FD="15.11.2013",TD="17.11.2013",elementer="FFX",Stasjoner=NA,center= c(61, 8),zoom=6,MinGrense=NA,FS=NA,TS=NA){ 
   #FFX gir høyeste middelvind, mens FGX gir høyeste vindkast, RR gir nedbørmengden, RR_R gir returperioden for nedbørmengden
   #center= c(64.5, 10) #Trøndelag
   #center= c(61, 8) #Sørnorge
@@ -36,11 +36,13 @@ VindKart <- function(FD="15.11.2013",TD="17.11.2013",elementer="FFX",Stasjoner=N
   
   Aar <- substr(FD,7,10)
   if (is.na(Stasjoner)){Stasjoner<- Stasjon.Laster(elementer=elementer,FY=Aar,TY=Aar)
-                        Sperrede <- c(89920, 86070) #put station nuber of stations that shall be excluded here
+                        Sperrede <- c(89920, 86070) #put station number of stations that shall be excluded here
                         LS <- length(Sperrede)
                         for (n in LS){
                           Stasjoner <- Stasjoner[Stasjoner[,6]!=Sperrede[n],]
                         }
+                        if (!is.na(FS)){Stasjoner <- Stasjoner[Stasjoner[,6]>=FS,]}
+                        if (!is.na(TS)){Stasjoner <- Stasjoner[Stasjoner[,6]<=TS,]}
                         Stasjoner <- Stasjoner[Stasjoner[,6]<=99989,]
   }
   St <- Stasjoner[,c(6,10,11)]
@@ -101,13 +103,16 @@ VindKart <- function(FD="15.11.2013",TD="17.11.2013",elementer="FFX",Stasjoner=N
       if(elementer=="RR_R"){
         Data[is.na(Data[,5]),5]<-0
         Data[Data[,5]<0,5]<-0
+        LD <- length(Data[,5])
         Nedbor.Mengde <- NA
         NedborMengde <- sum(c(sum(as.numeric(Data[,5]),na.rm=TRUE)),na.rm=TRUE)
         VindMaks <- NA
         if(is.finite(NedborMengde)){
           print(St[n,1])
-          NyUrl <- "http://klapp/kdvhpub/production/Report?re=51&head=&ct=text/plain&del=space&ddel=comma&no=0&nod=blank&nob=dot&flag=7&sflag=-1&qa=4&la=no&co=NO&m1=0&m1=1&m1=11&m2=2&m2=3&m2=4&m3=5&m3=6&m3=7&m4=8&m4=9&m4=10&num=10&nd=1&fac=1&nmt=1&lastperiod=true&pid=9&val="
-          NyUrl <- paste(NyUrl,NedborMengde,"&s=",St[n,1],sep="")
+          NyUrl <- "http://klapp/kdvhpub/production/Report?re=51&head=&ct=text/plain&del=space&ddel=comma&no=0&nod=blank&nob=dot&flag=7&sflag=-1&qa=4&la=no&co=NO&m1=0&m1=1&m1=11&m2=2&m2=3&m2=4&m3=5&m3=6&m3=7&m4=8&m4=9&m4=10&num=10&fac=1&nmt=1&lastperiod=true&pid=9&val="
+          NyUrl <- paste(NyUrl,NedborMengde,"&s=",St[n,1],"&nd=",LD,sep="")
+#          NyUrl <- "http://klapp/kdvhpub/production/Report?re=51&head=&ct=text/plain&del=space&ddel=comma&no=0&nod=blank&nob=dot&flag=7&sflag=-1&qa=4&la=no&co=NO&m1=0&m1=1&m1=11&m2=2&m2=3&m2=4&m3=5&m3=6&m3=7&m4=8&m4=9&m4=10&num=10&nd=1&fac=1&nmt=1&lastperiod=true&pid=9&val="
+#          NyUrl <- paste(NyUrl,NedborMengde,"&s=",St[n,1],sep="")
           VindMaks <- NA
           try(VindMaks<-scan(file=NyUrl,skip=12,n=2)[2],silent=TRUE)
         }
