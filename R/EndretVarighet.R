@@ -1,5 +1,12 @@
+#Les denne funksjonen inn i R:
+#
+# require(devtools)
+# source_url("https://raw.githubusercontent.com/metno/rscripts/master/R/EndretVarighet.R")
+
 require(devtools)
 source_url("https://raw.githubusercontent.com/metno/rscripts/master/R/DataLaster.R")
+
+
 
 EndretVarighet <- function(StNr=18700,element="TAM",grense=0,Maks=TRUE,FD=1961,TD=2015,Graf=T,Trend=T){
   Resultat <- c()
