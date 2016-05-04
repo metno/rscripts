@@ -11,7 +11,7 @@
 #https://dokit.met.no/klima/userservices/urlinterface/brukerdok
 #http://metklim.met.no/klima/userservices/urlinterface/brukerdok
 
-Dogn.Laster <- function(StNr=18700, elementer = c("TAM","TAX","TAN"), FD = "01.01.2003", TD = "31.12.2003", Nod="NA"){
+Dogn.Laster <- function(StNr=18700, elementer = c("TAM","TAX","TAN"), FD = "01.01.2003", TD = "31.12.2003", Nod="NA", URL.UT = FALSE){
 #Reads daily values
 #http://klapp.oslo.dnmi.no/metnopub/production/metno?re=14&p=TAM&p=TAN&p=TAX&fd=13.11.2002&td=12.12.2004&ddel=dot&del=space&ct=text/plain&s=18700&nod=NA&split=1
   if (is.numeric(TD)){TD = paste("31.12.",TD,sep="")}
@@ -23,6 +23,9 @@ Dogn.Laster <- function(StNr=18700, elementer = c("TAM","TAX","TAN"), FD = "01.0
   for (n in 1:length(elementer)){del1 <- paste(del1,"&p=",elementer[n],sep="")}
 #  print(del1)
 #  Dataserie <- read.table(del1, header = TRUE, sep = ";",  dec = ",", na.strings = "NA", skip=1, colClasses="numeric")
+  if(URL.UT){
+    print(del1)
+  }
   Dataserie <- read.table(del1, header = TRUE, sep = ";",  dec = ",", na.strings = "NA", skip=0, colClasses="numeric", stringsAsFactors=FALSE)
   Dataserie
 }
@@ -64,7 +67,7 @@ Dogn.Laster.flag <- function(StNr=18700, elementer = c("TAM","TAX","TAN"), FD = 
   Dataserie
 }
 
-Maaned.Laster <- function(StNr=18700, elementer = c("TAM","TAX","TAN"), FD = "01.01.2003", TD = "31.12.2003"){
+Maaned.Laster <- function(StNr=18700, elementer = c("TAM","TAX","TAN"), FD = "01.01.2003", TD = "31.12.2003", URL.UT=FALSE){
 #Reads monthly values
 #http://klapp.oslo.dnmi.no/metnopub/production/metno?re=15&p=TAM&p=TAN&p=TAX&fd=13.11.2002&td=12.12.2004&ddel=dot&del=space&ct=text/plain&s=18700&nod=NA&split=1
   if (is.numeric(TD)){TD = paste("31.12.",TD,sep="")}
@@ -74,6 +77,9 @@ Maaned.Laster <- function(StNr=18700, elementer = c("TAM","TAX","TAN"), FD = "01
   del1 <- paste(del1,"&fd=",FD,"&td=",TD,sep="")
   for (n in 1:length(elementer)){del1 <- paste(del1,"&p=",elementer[n],sep="")}
   #print(del1)
+  if(URL.UT){
+    print(del1)
+  }
   Datasett <- read.table(del1, header = TRUE, sep = ";",  dec = ",", na.strings = "NA", stringsAsFactors=FALSE)
 
   Datasett
@@ -93,7 +99,7 @@ Stasjon.Laster <- function(elementer="TAM", FY = 1971, TY = 2000){
   Datasett
 }
 
-Obs.Laster <- function(StNr=18700, elementer = c("TA"), FD = "01.01.2003", TD = "31.12.2003", tider=c(0,6,12,18), Auto=1){
+Obs.Laster <- function(StNr=18700, elementer = c("TA"), FD = "01.01.2003", TD = "31.12.2003", tider=c(0,6,12,18), Auto=1, URL.UT=FALSE){
 #Reads the observations
   #http://klapp.oslo.dnmi.no/metnopub/production/metno?re=17&p=VV&fd=13.11.2003&td=12.12.2003&h=0&h=6&nmt=0&ddel=dot&del=;&ct=text/plain&x=1&s=18700&nod=NAN
   del1 <- "http://klapp.oslo.dnmi.no/metnopub/production/metno?re=17&nmt=0&ddel=dot&del=semicolon&ct=text/plain&x=1&nod=NA&qa=5"
@@ -107,6 +113,9 @@ Obs.Laster <- function(StNr=18700, elementer = c("TA"), FD = "01.01.2003", TD = 
   for (n in 1:length(tider)){del1 <- paste(del1,"&h=",tider[n],sep="")}
 #  print(del1)
 #  Datasett <- read.table(del1, header = TRUE, sep = ";",  dec = ".", na.strings = "NA", skip=2,colClasses="numeric")
+  if(URL.UT){
+    print(del1)
+  }
   Datasett <- read.table(del1, header = TRUE, sep = ";",  dec = ".", na.strings = "NA", skip=0, stringsAsFactors=FALSE)
 #  Datasett <- read.table(del1, header = TRUE, sep = ";",  dec = ".", na.strings = "NA", skip=3,colClasses="numeric")
   #print(del1)
@@ -155,7 +164,7 @@ DognNormal.Laster <- function(StNr=18700){
   Datasett
 }
 
-Region.Laster <- function(region=0,rType="GR",m=c(0,1:12,21:24),FAar=1901,TAar=2010,element="TAMA"){
+Region.Laster <- function(region=0,rType="GR",m=c(0,1:12,21:24),FAar=1901,TAar=2010,element="TAMA",URL.UT=FALSE){
 #Reads the regional data
   #http://klapp/image/landsdelkart.jpg
   #http://klapp/metnopub/production/metno?re=20&ct=text/plain&del=semicolon&ddel=dot&p=TAMA&fy=1950&ty=2000&m=0&m=21&m=22&m=23&m=24&r_type=TR&r_no=1
@@ -170,6 +179,10 @@ Region.Laster <- function(region=0,rType="GR",m=c(0,1:12,21:24),FAar=1901,TAar=2
   Lenke <- paste(Lenke,"&r_type=",rType,sep="")
   Lenke <- paste(Lenke,"&r_no=",region,sep="")
   #print(Lenke)
+  
+  if(URL.UT){
+    print(Lenke)
+  }
   Datasett <- read.table(file=Lenke,header=TRUE,skip=1,sep=";",dec=".",stringsAsFactors=FALSE)
   Datasett
 }
