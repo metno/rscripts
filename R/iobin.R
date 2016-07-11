@@ -21,7 +21,7 @@
 ######################################################################
 
 #require(devtools)
-#source_url(https://raw.githubusercontent.com/metno/rscripts/master/R/iobin.R")
+#source_url("https://raw.githubusercontent.com/metno/rscripts/master/R/iobin.R")
 
 
 #--------------------------------------------------------------------------
