@@ -20,6 +20,10 @@
 #
 ######################################################################
 
+#require(devtools)
+#source_url(https://raw.githubusercontent.com/metno/rscripts/master/R/iobin.R")
+
+
 #--------------------------------------------------------------------------
 # writebinfile writes a vector or a 2D-array to a binary file (filename)
 # the 2D-array is first transfered to a vector (wvector).
