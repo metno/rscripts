@@ -1,10 +1,10 @@
 #Commands to use this directly from GIT:
 #require(devtools)
-#source_url(https://raw.githubusercontent.com/metno/rscripts/master/R/binleser.R")
+#source_url("https://raw.githubusercontent.com/metno/rscripts/master/R/binleser.R")
 
 
 require(devtools)
-source_url(https://raw.githubusercontent.com/metno/rscripts/master/R/iobin.R")
+source_url("https://raw.githubusercontent.com/metno/rscripts/master/R/iobin.R")
 
 
 Bin.Leser <- function(Para="TAM",Aar=1980,Mnd=01,Dag=01,dager=3,MaxMin="min",Test=FALSE){
