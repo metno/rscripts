@@ -1,11 +1,11 @@
 require(devtools)
 source_url("https://raw.githubusercontent.com/metno/rscripts/master/R/DataLaster.R")
-require(maps)
-require(mapdata)
-require(mapproj)
-require(mapplots)
-require(rgl)
-require(rgdal)
+#require(maps)
+#require(mapdata)
+#require(mapproj)
+#require(mapplots)
+#require(rgl)
+#require(rgdal)
 require(sp)
 require(RgoogleMaps)
 
@@ -28,22 +28,22 @@ require(RgoogleMaps)
 #VindKart(FD="07.02.2015",TD="08.02.2015",center=c(69,25),elementer="FFX")
 
 VindKart <- function(FD="15.11.2013",TD="17.11.2013",elementer="FFX",Stasjoner=NA,center= c(61, 8),zoom=6,MinGrense=NA,FS=NA,TS=NA){ 
-  #FFX gir høyeste middelvind, mens FGX gir høyeste vindkast, RR gir nedbørmengden, RR_R gir returperioden for nedbørmengden
-  #center= c(64.5, 10) #Trøndelag
-  #center= c(61, 8) #Sørnorge
-  #Stasjoner kan settes eksplisitt om en ønsker et spesielt utvalg, ellers hentes det dynamisk inn for alle stasjoner som har observert på tidspunktet
-  #zoom=6 #Kan justeres for å sette ulike utsnitt, men er ikk trinnløs
+  #FFX gir hÃ¸yeste middelvind, mens FGX gir hÃ¸yeste vindkast, RR gir nedbÃ¸rmengden, RR_R gir returperioden for nedbÃ¸rmengden
+  #center= c(64.5, 10) #TrÃ¸ndelag
+  #center= c(61, 8) #SÃ¸rnorge
+  #Stasjoner kan settes eksplisitt om en Ã¸nsker et spesielt utvalg, ellers hentes det dynamisk inn for alle stasjoner som har observert pÃ¥ tidspunktet
+  #zoom=6 #Kan justeres for Ã¥ sette ulike utsnitt, men er ikk trinnlÃ¸s
   
   Aar <- substr(FD,7,10)
   if (is.na(Stasjoner)){Stasjoner<- Stasjon.Laster(elementer=elementer,FY=Aar,TY=Aar)
-                        Sperrede <- c(89920, 86070) #put station number of stations that shall be excluded here
-                        LS <- length(Sperrede)
-                        for (n in LS){
-                          Stasjoner <- Stasjoner[Stasjoner[,6]!=Sperrede[n],]
-                        }
-                        if (!is.na(FS)){Stasjoner <- Stasjoner[Stasjoner[,6]>=FS,]}
-                        if (!is.na(TS)){Stasjoner <- Stasjoner[Stasjoner[,6]<=TS,]}
-                        Stasjoner <- Stasjoner[Stasjoner[,6]<=99989,]
+  Sperrede <- c(89920, 86070) #put station number of stations that shall be excluded here
+  LS <- length(Sperrede)
+  for (n in LS){
+    Stasjoner <- Stasjoner[Stasjoner[,6]!=Sperrede[n],]
+  }
+  if (!is.na(FS)){Stasjoner <- Stasjoner[Stasjoner[,6]>=FS,]}
+  if (!is.na(TS)){Stasjoner <- Stasjoner[Stasjoner[,6]<=TS,]}
+  Stasjoner <- Stasjoner[Stasjoner[,6]<=99989,]
   }
   St <- Stasjoner[,c(6,10,11)]
   ls <- length(St[,1])
@@ -57,6 +57,7 @@ VindKart <- function(FD="15.11.2013",TD="17.11.2013",elementer="FFX",Stasjoner=N
     if(elementer=="FGX"){try(Data <- Dogn.Laster(StNr=St[n,1],FD=FD,TD=TD,elementer=c("FGX")),silent=TRUE)}
     if(elementer=="RR"){try(Data <- Dogn.Laster(StNr=St[n,1],FD=FD,TD=TD,elementer=c("RR")),silent=TRUE)}
     if(elementer=="RR_R"){try(Data <- Dogn.Laster(StNr=St[n,1],FD=FD,TD=TD,elementer=c("RR")),silent=TRUE)}
+    if(elementer=="TAN"){try(Data <- Dogn.Laster(StNr=St[n,1],FD=FD,TD=TD,elementer=c("TAN")),silent=TRUE)}
     #print(St[n,1])
     #print(length(Data))
     if(length(Data>0)){
@@ -100,6 +101,22 @@ VindKart <- function(FD="15.11.2013",TD="17.11.2013",elementer="FFX",Stasjoner=N
         if (VindMaks >= (50+Startpunkt) & VindMaks<(75+Startpunkt)){Farge="darkblue"}
         if (VindMaks >= (25+Startpunkt) & VindMaks<(50+Startpunkt)){Farge="darkgreen"}
       }
+      if(elementer=="TAN"){
+#        Data[is.na(Data[,5]),5]<-0
+#        Data[Data[,5]<0,5]<-0
+        VindMaks <- max(c(max(as.numeric(Data[,5]),na.rm=TRUE)),na.rm=TRUE)
+        #Farver  settes her for vindkast, grenser i m/s
+        Farge<-"gray19"
+        #      if (VindMaks > 32.6*1.3){Farge="darkred"}
+        #      if (VindMaks > 28.4*1.3 & VindMaks<32.7*1.3){Farge="Purple"}
+        #      if (VindMaks > 24.4*1.3 & VindMaks<28.5*1.3){Farge="darkblue"}
+        #      if (VindMaks > 20.7*1.3 & VindMaks<24.5*1.3){Farge="darkgreen"}
+        Startpunkt <- 0
+        if(!is.na(MinGrense)){Startpunkt<-MinGrense}
+        if (VindMaks >  0){Farge="darkred"}
+        if (VindMaks == 0){Farge="darkgreen"}
+        if (VindMaks <  0){Farge="darkblue"}
+      }
       if(elementer=="RR_R"){
         Data[is.na(Data[,5]),5]<-0
         Data[Data[,5]<0,5]<-0
@@ -111,8 +128,8 @@ VindKart <- function(FD="15.11.2013",TD="17.11.2013",elementer="FFX",Stasjoner=N
           print(St[n,1])
           NyUrl <- "http://klapp/kdvhpub/production/Report?re=51&head=&ct=text/plain&del=space&ddel=comma&no=0&nod=blank&nob=dot&flag=7&sflag=-1&qa=4&la=no&co=NO&m1=0&m1=1&m1=11&m2=2&m2=3&m2=4&m3=5&m3=6&m3=7&m4=8&m4=9&m4=10&num=10&fac=1&nmt=1&lastperiod=true&pid=9&val="
           NyUrl <- paste(NyUrl,NedborMengde,"&s=",St[n,1],"&nd=",LD,sep="")
-#          NyUrl <- "http://klapp/kdvhpub/production/Report?re=51&head=&ct=text/plain&del=space&ddel=comma&no=0&nod=blank&nob=dot&flag=7&sflag=-1&qa=4&la=no&co=NO&m1=0&m1=1&m1=11&m2=2&m2=3&m2=4&m3=5&m3=6&m3=7&m4=8&m4=9&m4=10&num=10&nd=1&fac=1&nmt=1&lastperiod=true&pid=9&val="
-#          NyUrl <- paste(NyUrl,NedborMengde,"&s=",St[n,1],sep="")
+          #          NyUrl <- "http://klapp/kdvhpub/production/Report?re=51&head=&ct=text/plain&del=space&ddel=comma&no=0&nod=blank&nob=dot&flag=7&sflag=-1&qa=4&la=no&co=NO&m1=0&m1=1&m1=11&m2=2&m2=3&m2=4&m3=5&m3=6&m3=7&m4=8&m4=9&m4=10&num=10&nd=1&fac=1&nmt=1&lastperiod=true&pid=9&val="
+          #          NyUrl <- paste(NyUrl,NedborMengde,"&s=",St[n,1],sep="")
           VindMaks <- NA
           try(VindMaks<-scan(file=NyUrl,skip=12,n=2)[2],silent=TRUE)
         }
@@ -142,3 +159,5 @@ VindKart <- function(FD="15.11.2013",TD="17.11.2013",elementer="FFX",Stasjoner=N
     }
   }
 }
+
+
