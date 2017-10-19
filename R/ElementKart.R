@@ -27,8 +27,8 @@ require(RgoogleMaps)
 #VindKart(FD="07.02.2015",TD="08.02.2015",center=c(69,25),elementer="FGX")
 #VindKart(FD="07.02.2015",TD="08.02.2015",center=c(69,25),elementer="FFX")
 
-VindKart <- function(FD="15.11.2013",TD="17.11.2013",elementer="FFX",Stasjoner=NA,center= c(61, 8),zoom=6,MinGrense=NA,FS=NA,TS=NA){ 
-  #FFX gir hÃ¸yeste middelvind, mens FGX gir hÃ¸yeste vindkast, RR gir nedbÃ¸rmengden, RR_R gir returperioden for nedbÃ¸rmengden
+ElementKart <- function(FD="15.11.2013",TD="17.11.2013",elementer="FFX",Stasjoner=NA,center= c(61, 8),zoom=6,MinGrense=NA,FS=NA,TS=NA){ 
+  #FFX gir hÃ¸yeste middelvind, mens FGX gir hÃ¸yeste vindkast, RR gir nedbÃ¸rmengden, RR_R gir returperioden for nedbÃ¸rmengden, TAN og TAX gir min og max temp.
   #center= c(64.5, 10) #TrÃ¸ndelag
   #center= c(61, 8) #SÃ¸rnorge
   #Stasjoner kan settes eksplisitt om en Ã¸nsker et spesielt utvalg, ellers hentes det dynamisk inn for alle stasjoner som har observert pÃ¥ tidspunktet
@@ -58,6 +58,7 @@ VindKart <- function(FD="15.11.2013",TD="17.11.2013",elementer="FFX",Stasjoner=N
     if(elementer=="RR"){try(Data <- Dogn.Laster(StNr=St[n,1],FD=FD,TD=TD,elementer=c("RR")),silent=TRUE)}
     if(elementer=="RR_R"){try(Data <- Dogn.Laster(StNr=St[n,1],FD=FD,TD=TD,elementer=c("RR")),silent=TRUE)}
     if(elementer=="TAN"){try(Data <- Dogn.Laster(StNr=St[n,1],FD=FD,TD=TD,elementer=c("TAN")),silent=TRUE)}
+    if(elementer=="TAX"){try(Data <- Dogn.Laster(StNr=St[n,1],FD=FD,TD=TD,elementer=c("TAX")),silent=TRUE)}
     #print(St[n,1])
     #print(length(Data))
     if(length(Data>0)){
@@ -102,6 +103,22 @@ VindKart <- function(FD="15.11.2013",TD="17.11.2013",elementer="FFX",Stasjoner=N
         if (VindMaks >= (25+Startpunkt) & VindMaks<(50+Startpunkt)){Farge="darkgreen"}
       }
       if(elementer=="TAN"){
+#        Data[is.na(Data[,5]),5]<-0
+#        Data[Data[,5]<0,5]<-0
+        VindMaks <- min(c(min(as.numeric(Data[,5]),na.rm=TRUE)),na.rm=TRUE)
+        #Farver  settes her for vindkast, grenser i m/s
+        Farge<-"gray19"
+        #      if (VindMaks > 32.6*1.3){Farge="darkred"}
+        #      if (VindMaks > 28.4*1.3 & VindMaks<32.7*1.3){Farge="Purple"}
+        #      if (VindMaks > 24.4*1.3 & VindMaks<28.5*1.3){Farge="darkblue"}
+        #      if (VindMaks > 20.7*1.3 & VindMaks<24.5*1.3){Farge="darkgreen"}
+        Startpunkt <- 0
+        if(!is.na(MinGrense)){Startpunkt<-MinGrense}
+        if (VindMaks >  0){Farge="darkred"}
+        if (VindMaks == 0){Farge="darkgreen"}
+        if (VindMaks <  0){Farge="darkblue"}
+      }
+      if(elementer=="TAX"){
 #        Data[is.na(Data[,5]),5]<-0
 #        Data[Data[,5]<0,5]<-0
         VindMaks <- max(c(max(as.numeric(Data[,5]),na.rm=TRUE)),na.rm=TRUE)
