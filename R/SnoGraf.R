@@ -1,4 +1,5 @@
 
+
 SnoGraf <- function(StNr=18700, FAar=NA,TAar=NA,Aar=2018,AntAar=30){
   if (is.na(TAar)){TAar<-Aar-1}
   if (is.na(FAar)){FAar<-TAar-AntAar}
@@ -48,15 +49,15 @@ SnoGraf2 <- function(StNr=18700, FAar=NA,TAar=NA,Aar=2018,RefAar=NA,AntAar=30){
   if (is.na(RefAar)){RefAar<-TAar}
   FD <- paste(FAar,"-01-01",sep="")
   TD <- paste(Aar,"-12-31",sep="") #Kan endres til TAar
-  MSnow <- max(Dogn.Laster(elements = "max(surface_snow_thickness P1M)",start = FD,stop = TD,Daglig=F)[,4])
+  MSnow <- max(Dogn.Laster(elements = "max(surface_snow_thickness P1M)",start = FD,stop = TD,Daglig=F,StNr=StNr)[,4])
 
   FD <- paste(FAar-1,"-08-01",sep="")
   TD <- paste(FAar,"-07-31",sep="")
-  Data <- Dogn.Laster(elements = "surface_snow_thickness",start = FD,stop = TD)
+  Data <- Dogn.Laster(elements = "surface_snow_thickness",start = FD,stop = TD,StNr=StNr,Daglig=F)
   Data[Data[,4]<0,4]<-NA
-  D2 <- cbind((Data[,3]-strptime(FD,format="%Y-%m-%d",tz="UTC"))/86400,Data[,4])
+  D2 <- cbind(as.numeric(Data[,3]-strptime(FD,format="%Y-%m-%d",tz="UTC"), units = "days"),Data[,4])
   plot(D2[,1],D2[,2],type="l",col="gray",xlim=c(1,366),ylim=c(0,MSnow),ylab="Snødybde [cm]",xlab="",main=StNr,
-       sub=paste("Graå streker: ", FAar," - ", TAar, ", Blå strek: ", RefAar, ", Rød strek: ",Aar,sep=""))
+       sub=paste("Grå streker: ", FAar," - ", TAar, ", Blå strek: ", RefAar, ", Rød strek: ",Aar,sep=""))
 
   lines(c(0,0),c(-10,10000))#Aug
   lines(c(31,31),c(-10,10000))#Aug
@@ -71,26 +72,14 @@ SnoGraf2 <- function(StNr=18700, FAar=NA,TAar=NA,Aar=2018,RefAar=NA,AntAar=30){
   lines(c(305,305),c(-10,10000))#Mai
   lines(c(335,335),c(-10,10000))#Jun
   lines(c(365,365),c(-10,10000))#Jun
-  text(10,2,"Aug")
-  text(41,2,"Sep")
-  text(71,2,"Okt")
-  text(103,2,"Nov")
-  text(133,2,"Des")
-  text(165,2,"Jan")
-  text(195,2,"Feb")
-  text(223,2,"Mar")
-  text(255,2,"Apr")
-  text(285,2,"Mai")
-  text(316,2,"Jun")
-  text(346,2,"Jul")
 
 
   for(aar in FAar:TAar){
     FD <- paste(aar-1,"-08-01",sep="")
     TD <- paste(aar,"-07-31",sep="")
-    Data <- Dogn.Laster(elements = "surface_snow_thickness",start = FD,stop = TD)
+    Data <- Dogn.Laster(elements = "surface_snow_thickness",start = FD,stop = TD,StNr=StNr)
     Data[Data[,4]<0,4]<-NA
-    D2 <- cbind((Data[,3]-strptime(FD,format="%Y-%m-%d",tz="UTC"))/86400,Data[,4])
+    D2 <- cbind(as.numeric(Data[,3]-strptime(FD,format="%Y-%m-%d",tz="UTC"), units = "days"),Data[,4])
     lines(D2[,1],D2[,2],col="gray")
   }
   text(10,2,"Aug")
@@ -106,20 +95,194 @@ SnoGraf2 <- function(StNr=18700, FAar=NA,TAar=NA,Aar=2018,RefAar=NA,AntAar=30){
   text(316,2,"Jun")
   text(346,2,"Jul")
 
-  FD <- paste(TAar-1,"-08-01",sep="")
-  TD <- paste(TAar,"-07-31",sep="")
-  Data <- Dogn.Laster(elements = "surface_snow_thickness",start = FD,stop = TD)
+  FD <- paste(RefAar-1,"-08-01",sep="")
+  TD <- paste(RefAar,"-07-31",sep="")
+  Data <- Dogn.Laster(elements = "surface_snow_thickness",start = FD,stop = TD,StNr=StNr)
   Data[Data[,4]<0,4]<-NA
-  D2 <- cbind((Data[,3]-strptime(FD,format="%Y-%m-%d",tz="UTC"))/86400,Data[,4])
+  D2 <- cbind(as.numeric(Data[,3]-strptime(FD,format="%Y-%m-%d",tz="UTC"), units = "days"),Data[,4])
   lines(D2[,1],D2[,2],col="blue",lwd=2)
 
   FD <- paste(Aar-1,"-08-01",sep="")
   TD <- paste(Aar,"-07-31",sep="")
-  Data <- Dogn.Laster(elements = "surface_snow_thickness",start = FD,stop = TD)
+  Data <- Dogn.Laster(elements = "surface_snow_thickness",start = FD,stop = TD,StNr=StNr)
   Data[Data[,4]<0,4]<-NA
-  D2 <- cbind(Data[,3]-strptime(FD,format="%Y-%m-%d",tz="UTC"),Data[,4])
+  D2 <- cbind(as.numeric(Data[,3]-strptime(FD,format="%Y-%m-%d",tz="UTC"), units = "days"),Data[,4])
   lines(D2[,1],D2[,2],col="red",lwd=2)
 }
+
+SnoGraf2Ski <- function(StNr=18700, FAar=NA,TAar=NA,Aar=2018,RefAar=NA,AntAar=30,SkiFore=25){
+  if (is.na(TAar)){TAar<-Aar-1}
+  if (is.na(FAar)){FAar<-TAar-AntAar}
+  if (is.na(RefAar)){RefAar<-TAar}
+  FD <- paste(FAar,"-01-01",sep="")
+  TD <- paste(Aar,"-12-31",sep="") #Kan endres til TAar
+  MSnow <- max(Dogn.Laster(elements = "max(surface_snow_thickness P1M)",start = FD,stop = TD,Daglig=F,StNr=StNr)[,4])
+
+  FD <- paste(FAar-1,"-08-01",sep="")
+  TD <- paste(FAar,"-07-31",sep="")
+  Data <- Dogn.Laster(elements = "surface_snow_thickness",start = FD,stop = TD,StNr=StNr,Daglig=F)
+  Data[Data[,4]<0,4]<-NA
+  D2 <- cbind(as.numeric(Data[,3]-strptime(FD,format="%Y-%m-%d",tz="UTC"), units = "days"),Data[,4])
+  plot(D2[,1],D2[,2],type="l",col="gray",xlim=c(1,366),ylim=c(0,MSnow),ylab="Snødybde [cm]",xlab="",main=StNr,
+       sub=paste("Grå streker: ", FAar," - ", TAar, ", Blå strek: ", RefAar, ", Rød strek: ",Aar,sep=""))
+
+  lines(c(0,0),c(-10,10000))#Aug
+  lines(c(31,31),c(-10,10000))#Aug
+  lines(c(61,61),c(-10,10000))#Sep
+  lines(c(92,92),c(-10,10000))#Okt
+  lines(c(122,122),c(-10,10000))#Nov
+  lines(c(153,153),c(-10,10000),lwd=2)#Des
+  lines(c(184,184),c(-10,10000))#Jan
+  lines(c(212,212),c(-10,10000))#Feb
+  lines(c(244,244),c(-10,10000))#Mar
+  lines(c(274,274),c(-10,10000))#Apr
+  lines(c(305,305),c(-10,10000))#Mai
+  lines(c(335,335),c(-10,10000))#Jun
+  lines(c(365,365),c(-10,10000))#Jun
+
+
+  for(aar in FAar:TAar){
+    FD <- paste(aar-1,"-08-01",sep="")
+    TD <- paste(aar,"-07-31",sep="")
+    Data <- Dogn.Laster(elements = "surface_snow_thickness",start = FD,stop = TD,StNr=StNr)
+    Data[Data[,4]<0,4]<-NA
+    D2 <- cbind(as.numeric(Data[,3]-strptime(FD,format="%Y-%m-%d",tz="UTC"), units = "days"),Data[,4])
+    lines(D2[,1],D2[,2],col="gray")
+  }
+  text(10,2,"Aug")
+  text(41,2,"Sep")
+  text(71,2,"Okt")
+  text(103,2,"Nov")
+  text(133,2,"Des")
+  text(165,2,"Jan")
+  text(195,2,"Feb")
+  text(223,2,"Mar")
+  text(255,2,"Apr")
+  text(285,2,"Mai")
+  text(316,2,"Jun")
+  text(346,2,"Jul")
+
+  FD <- paste(RefAar-1,"-08-01",sep="")
+  TD <- paste(RefAar,"-07-31",sep="")
+  Data <- Dogn.Laster(elements = "surface_snow_thickness",start = FD,stop = TD,StNr=StNr)
+  Data[Data[,4]<0,4]<-NA
+  D2 <- cbind(as.numeric(Data[,3]-strptime(FD,format="%Y-%m-%d",tz="UTC"), units = "days"),Data[,4])
+  lines(D2[,1],D2[,2],col="blue",lwd=2)
+
+  FD <- paste(Aar-1,"-08-01",sep="")
+  TD <- paste(Aar,"-07-31",sep="")
+  Data <- Dogn.Laster(elements = "surface_snow_thickness",start = FD,stop = TD,StNr=StNr)
+  Data[Data[,4]<0,4]<-NA
+  D2 <- cbind(as.numeric(Data[,3]-strptime(FD,format="%Y-%m-%d",tz="UTC"), units = "days"),Data[,4])
+  lines(D2[,1],D2[,2],col="red",lwd=2)
+  if(!is.na(SkiFore)){
+    lines(c(-1000,1000),c(SkiFore,SkiFore),col="antiquewhite")
+    text(c(10),c(25),"Skiføre (25 cm)",pos=3,offset = 0)
+  }
+}
+
+
+SnoGraf.Varsel <- function(StNr=18700, FAar=NA,TAar=NA,Aar=2018,RefAar=NA,AntAar=30){
+  if (is.na(TAar)){TAar<-Aar-1}
+  if (is.na(FAar)){FAar<-TAar-AntAar}
+  if (is.na(RefAar)){RefAar<-TAar}
+  FD <- paste(FAar,"-01-01",sep="")
+  TD <- paste(Aar,"-12-31",sep="") #Kan endres til TAar
+  MSnow <- max(Dogn.Laster(elements = "max(surface_snow_thickness P1M)",start = FD,stop = TD,Daglig=F,StNr=StNr)[,4])
+
+  FD <- paste(Aar-1,"-08-01",sep="")
+  TD <- paste(Aar,"-07-31",sep="")
+  Data <- Dogn.Laster(elements = "surface_snow_thickness",start = FD,stop = TD,StNr=StNr)
+  D2 <- Data[Data[,4]>0,]
+  LD2<-length(D2[,4])
+  Dagens <- D2[LD2,]
+
+
+  FD <- paste(FAar-1,"-08-01",sep="")
+  TD <- paste(FAar,"-07-31",sep="")
+  Data <- Dogn.Laster(elements = "surface_snow_thickness",start = FD,stop = TD,StNr=StNr,Daglig=F)
+  Data[Data[,4]<0,4]<-NA
+  D2 <- cbind(as.numeric(Data[,3]-strptime(FD,format="%Y-%m-%d",tz="UTC"), units = "days"),Data[,4])
+  plot(D2[,1],D2[,2],type="l",col="gray",xlim=c(1,366),ylim=c(0,MSnow),ylab="Snødybde [cm]",xlab="",main=StNr,
+       sub=paste("Grå streker: ", FAar," - ", TAar, ", Blå strek: ", RefAar, ", Rød strek: ",Aar,sep=""))
+
+  lines(c(0,0),c(-10,10000))#Aug
+  lines(c(31,31),c(-10,10000))#Aug
+  lines(c(61,61),c(-10,10000))#Sep
+  lines(c(92,92),c(-10,10000))#Okt
+  lines(c(122,122),c(-10,10000))#Nov
+  lines(c(153,153),c(-10,10000),lwd=2)#Des
+  lines(c(184,184),c(-10,10000))#Jan
+  lines(c(212,212),c(-10,10000))#Feb
+  lines(c(244,244),c(-10,10000))#Mar
+  lines(c(274,274),c(-10,10000))#Apr
+  lines(c(305,305),c(-10,10000))#Mai
+  lines(c(335,335),c(-10,10000))#Jun
+  lines(c(365,365),c(-10,10000))#Jun
+
+  for(aar in FAar:TAar){
+    FD <- paste(aar-1,"-08-01",sep="")
+    TD <- paste(aar,"-07-31",sep="")
+    Data <- Dogn.Laster(elements = "surface_snow_thickness",start = FD,stop = TD,StNr=StNr)
+    Data[Data[,4]<0,4]<-NA
+    D2 <- cbind(as.numeric(Data[,3]-strptime(FD,format="%Y-%m-%d",tz="UTC"), units = "days"),Data[,4])
+    lines(D2[,1],D2[,2],col="gray")
+  }
+  text(10,2,"Aug")
+  text(41,2,"Sep")
+  text(71,2,"Okt")
+  text(103,2,"Nov")
+  text(133,2,"Des")
+  text(165,2,"Jan")
+  text(195,2,"Feb")
+  text(223,2,"Mar")
+  text(255,2,"Apr")
+  text(285,2,"Mai")
+  text(316,2,"Jun")
+  text(346,2,"Jul")
+
+  for(aar in FAar:TAar){
+    FD <- paste(aar-1,"-08-01",sep="")
+    TD <- paste(aar,"-07-31",sep="")
+    Data <- Dogn.Laster(elements = "surface_snow_thickness",start = FD,stop = TD,StNr=StNr)
+    Data[Data[,4]<0,4]<-NA
+    D2 <- cbind(as.numeric(Data[,3]-strptime(FD,format="%Y-%m-%d",tz="UTC"), units = "days"),Data[,4],abs(as.numeric(Data[,3]-Dagens[1,3], units = "days")),abs(Data[,4]-Dagens[,3]))
+
+    lines(D2[,1],D2[,2],col="orange")
+  }
+  FD <- paste(RefAar-1,"-08-01",sep="")
+  TD <- paste(RefAar,"-07-31",sep="")
+  Data <- Dogn.Laster(elements = "surface_snow_thickness",start = FD,stop = TD,StNr=StNr)
+  Data[Data[,4]<0,4]<-NA
+  D2 <- cbind(as.numeric(Data[,3]-strptime(FD,format="%Y-%m-%d",tz="UTC"), units = "days"),Data[,4])
+  lines(D2[,1],D2[,2],col="blue",lwd=2)
+
+  FD <- paste(Aar-1,"-08-01",sep="")
+  TD <- paste(Aar,"-07-31",sep="")
+  Data <- Dogn.Laster(elements = "surface_snow_thickness",start = FD,stop = TD,StNr=StNr)
+  Data[Data[,4]<0,4]<-NA
+  D2 <- cbind(as.numeric(Data[,3]-strptime(FD,format="%Y-%m-%d",tz="UTC"), units = "days"),Data[,4])
+  lines(D2[,1],D2[,2],col="red",lwd=2)
+}
+
+SnoGraf.Klima <- function(StNr=18700, FAar=1961,TAar=2018){
+  FD <- paste(FAar,"-01-01",sep="")
+  TD <- paste(TAar,"-12-31",sep="") #Kan endres til TAar
+  MSnow <- Dogn.Laster(elements = "max(surface_snow_thickness P1M)",start = FD,stop = TD,Daglig=F,StNr=StNr)
+  MSnow <- cbind(as.numeric(strftime(MSnow[,3],format="%Y")),as.numeric(strftime(MSnow[,3],format="%m")),MSnow[,4])
+  MMSnow <- max(MSnow[,3])
+  print(MSnow)
+  plot(MSnow[MSnow[,2]==1,1],MSnow[MSnow[,2]==1,3],type="l",ylim=c(0,MMSnow))
+  farver <- rainbow(12)
+  for(m in 1:12){
+    lines(MSnow[MSnow[,2]==m,1],MSnow[MSnow[,2]==m,3],col=farver[m])
+  }
+
+}
+
+
+
+
 
 #rm(list=ls())
 library("httr")
