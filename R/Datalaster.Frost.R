@@ -1,6 +1,6 @@
 #Commands to use this directly from GIT:
 #require(devtools)
-#source_url("https://raw.githubusercontent.com/metno/rscripts/master/R/DataLaster.R")
+#source_url("https://raw.githubusercontent.com/metno/rscripts/master/R/DataLaster.Frost.R")
 
 #rm(list=ls())
 library("httr")
