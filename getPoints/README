@@ -1,0 +1,68 @@
+Howto extract point data from NGCD
+==================================
+Cristian Lussana 2018-09-28
+
+Extract point values from the Nordic Gridded Climate Dataset (NGCD)
+http://thredds.met.no/thredds/catalog/ngcd/catalog.html
+or:
+/lustre/storeB/project/metkl/senorge2/thredds/Nordic_Gridded_Climate_Dataset_NGCD/
+The user is allowed to specify several gridpoints at once.
+The values returned are those of neighbouring gridpoints within a radius of 10km with the elevation nearest to the user-specified points. Note that 10km is not hard-coded in the program and one can specify something different.
+
+
+This directory includes 3 files (other than this README):
+- getPoints.sh, bash script, driver (the command line program)
+- getPoints.R, R-script, called by getPoints.sh (this should not be modified)
+- ngcd_getpoints.cfg, configuration file for getPoints.R (this should not be modified)
+
+Prerequisites
+=============
+The R-libraries needed are
+- argparser
+- sp
+- raster
+- rgdal
+- ncdf4
+all available from the usual R repositories
+
+This program has been tested on MET Norway PPI/lustre system and it relies on a connection with NGCD such as /lustre/storeB/...
+
+Customization
+=============
+Open "getPoints.sh", search for (*) and follow the instructions
+
+Command line
+============
+
+./getPoints.sh -s [start] -e [end] -v [var] -t [type] -o [output]
+where:
+start= start date, format is year.month.day (e.g., 2018.01.01)
+end= end date, format is year.month.day (e.g., 2018.01.01)
+var= NGCD variable abbreviation
+     TG= mean daily temperature (Kelvin) equivalent to TAMRR KDVH
+     TX= max daily temperature (Kelvin) equivalent to TAX KDVH
+     TN= min daily temperature (Kelvin) equivalent to TAN KDVH
+     RR= daily total precipitation (mm/day) equivalent to RR KDVH
+type= NGCD dataset type (1 or 2)
+output= full output file name
+
+The script "getPoints.sh" is written such that several jobs can run in parallel.
+
+Fo example, you may execute:
+
+qsub ./getPoints.sh -s 2000.01.01 -e 2000.01.31 -v TG -t 1 -o NGCD_TG_type1_200001.txt
+qsub ./getPoints.sh -s 2000.01.01 -e 2000.01.31 -v TG -t 2 -o NGCD_TG_type2_200001.txt
+
+and you'll get in the output files the data requested for TG type1 and TG type2
+
+Output file format is:
+
+pid;date;x;y;x_transf;y_transf;z;val;
+1;20000101;61819;6651310;4162593.239364;4077157.697128;1120;270.45;
+
+pid= point identifier (first point specified gets the id=1 and so on)
+date= date in the format YYYYMMDD (e.g., 20000101 is the 1st of January 2000)
+x,y= original coordinates (as specified by the user)
+x_transf,y_transf= transformed coordinates in the NGCD coordinate reference system 
+z= NGCD elevation (m amsl)
+val= returned value
