@@ -1,3 +1,4 @@
+
 SnoGraf <- function(StNr=18700, FAar=NA,TAar=NA,Aar=2018,AntAar=30){
   if (is.na(TAar)){TAar<-Aar-1}
   if (is.na(FAar)){FAar<-TAar-AntAar}
@@ -142,10 +143,7 @@ SnoGraf2Ski <- function(StNr=18700, FAar=NA,TAar=NA,Aar=2018,RefAar=NA,AntAar=30
   for(aar in FAar:TAar){
     FD <- paste(aar-1,"-08-01",sep="")
     TD <- paste(aar,"-07-31",sep="")
-    Data <- Dogn.Laster(elements = "surface_snow_thickness",start = FD,stop = TD,StNr=StNr)
-    Data[Data[,4]<0,4]<-NA
-    D2 <- cbind(as.numeric(Data[,3]-strptime(FD,format="%Y-%m-%d",tz="UTC"), units = "days"),Data[,4])
-    lines(D2[,1],D2[,2],col="gray")
+    try(SnoGraf2Ski.Plotter(FD=FD,TD=TD,StNr=StNr),silent=T)
   }
   text(10,2,"Aug")
   text(41,2,"Sep")
@@ -174,11 +172,82 @@ SnoGraf2Ski <- function(StNr=18700, FAar=NA,TAar=NA,Aar=2018,RefAar=NA,AntAar=30
   D2 <- cbind(as.numeric(Data[,3]-strptime(FD,format="%Y-%m-%d",tz="UTC"), units = "days"),Data[,4])
   lines(D2[,1],D2[,2],col="red",lwd=2)
   if(!is.na(SkiFore)){
-    lines(c(-1000,1000),c(SkiFore,SkiFore),col="antiquewhite")
+    lines(c(-1000,1000),c(SkiFore,SkiFore),col="antiquewhite",lwd=2)
     text(c(30),c(25),"Skiføre (25 cm)",pos=3,offset = 0)
   }
 }
 
+
+SnoGraf2Ski.Plotter <- function(FD,TD,StNr){
+  Data <- Dogn.Laster(elements = "surface_snow_thickness",start = FD,stop = TD,StNr=StNr);
+  Data[Data[,4]<0,4]<-NA;
+  D2 <- cbind(as.numeric(Data[,3]-strptime(FD,format="%Y-%m-%d",tz="UTC"), units = "days"),Data[,4]);
+  lines(D2[,1],D2[,2],col="gray")
+}
+
+
+SnoGraf.MaxSno <- function(StNr=18700,FAar=1961,TAar=2018,Tittel="Årlig maks snødybde på Oslo-Blindern",FokusAar=2018){
+
+  FD <- paste(FAar,"-01-01",sep="")
+  TD <- paste(TAar,"-12-31",sep="") #Kan endres til TAar
+  MSnow <- max(Dogn.Laster(elements = "max(surface_snow_thickness P1M)",start = FD,stop = TD,Daglig=F,StNr=StNr)[,4])
+
+  plot(c(-1000,10000),c(50,50),xlim = c(FAar,TAar),ylim=c(0,MSnow),main=Tittel,xlab="",ylab="",type = "l")
+
+
+  Resultat <- c()
+  for (Aar in FAar:TAar){
+    FD <- paste(Aar,"-01-01",sep="")
+    TD <- paste(Aar,"-12-31",sep="") #Kan endres til TAar
+    MSnow <- max(Dogn.Laster(elements = "max(surface_snow_thickness P1M)",start = FD,stop = TD,Daglig=F,StNr=StNr)[,4])
+    Resultat <- rbind(Resultat,
+                      c(Aar,MSnow))
+    PX <- c(Aar-0.5, Aar-0.5, Aar+0.5, Aar+0.5, Aar-0.5)
+    PY <- c(0,         MSnow,     MSnow,      0,         0)
+    polygon(PX,PY,col = "antiquewhite")
+  }
+
+  MSnow <- Resultat[Resultat[,1]==FokusAar,2]
+  Aar <- FokusAar
+
+  PX <- c(Aar-0.5, Aar-0.5, Aar+0.5, Aar+0.5, Aar-0.5)
+  PY <- c(0,         MSnow,     MSnow,      0,         0)
+  polygon(PX,PY,col = "antiquewhite",border="darkred",lwd=2)
+
+  Resultat
+}
+
+SnoGraf.MaxSno2 <- function(StNr=18700,FAar=1961,TAar=2018,Tittel="Årlig maks snødybde på Oslo-Blindern",FokusAar=2018){
+
+  FD <- paste(FAar,"-01-01",sep="")
+  TD <- paste(TAar,"-12-31",sep="") #Kan endres til TAar
+  MSnow <- max(Dogn.Laster(elements = "max(surface_snow_thickness P1M)",start = FD,stop = TD,Daglig=F,StNr=StNr)[,4])
+
+  plot(c(-1000,10000),c(50,50),xlim = c(FAar,TAar),ylim=c(0,MSnow),main=Tittel,xlab="",ylab="",type = "l")
+
+
+  Resultat <- c()
+  for (Aar in FAar:TAar){
+    FD <- paste(Aar,"-01-01",sep="")
+    TD <- paste(Aar,"-12-31",sep="") #Kan endres til TAar
+    MSnow <- max(Dogn.Laster(elements = "max(surface_snow_thickness P1M)",start = FD,stop = TD,Daglig=F,StNr=StNr)[,4])
+    Resultat <- rbind(Resultat,
+                      c(Aar,MSnow))
+    PX <- c(Aar-0.5, Aar-0.5, Aar+0.5, Aar+0.5, Aar-0.5)
+    PY <- c(0,         MSnow,     MSnow,      0,         0)
+    polygon(PX,PY,col = "antiquewhite")
+    text(Aar,10,paste(Aar,": ",MSnow),srt=90)
+  }
+
+  MSnow <- Resultat[Resultat[,1]==FokusAar,2]
+  Aar <- FokusAar
+
+  PX <- c(Aar-0.5, Aar-0.5, Aar+0.5, Aar+0.5, Aar-0.5)
+  PY <- c(0,         MSnow,     MSnow,      0,         0)
+  polygon(PX,PY,col = "antiquewhite",border="darkred",lwd=2)
+  text(Aar,10,paste(Aar,": ",MSnow),srt=90,col="DarkRed")
+  Resultat
+}
 
 
 SnoGraf.Klima <- function(StNr=18700, FAar=1961,TAar=2018){
@@ -260,6 +329,284 @@ SnoGraf.Klima3 <- function(StNr=18700, FAar=1961,TAar=2018, SLim=1){
   text(346,FAar,"Jul")
 
 }
+
+SnoGraf.Klima4 <- function(StNr=18700, FAar=1961,TAar=2018, SLim=1){
+  Resultat <- c()
+  plot(-1000,-1000,xlim = c(0,365),ylim = c(FAar,TAar),xlab="",ylab = "", main=StNr)
+  lines(c(0,0),c(-10,10000))#Aug
+  lines(c(31,31),c(-10,10000))#Aug
+  lines(c(61,61),c(-10,10000))#Sep
+  lines(c(92,92),c(-10,10000))#Okt
+  lines(c(122,122),c(-10,10000))#Nov
+  lines(c(153,153),c(-10,10000),lwd=2)#Des
+  lines(c(184,184),c(-10,10000))#Jan
+  lines(c(212,212),c(-10,10000))#Feb
+  lines(c(244,244),c(-10,10000))#Mar
+  lines(c(274,274),c(-10,10000))#Apr
+  lines(c(305,305),c(-10,10000))#Mai
+  lines(c(335,335),c(-10,10000))#Jun
+  lines(c(365,365),c(-10,10000))#Jun
+
+  for(aar in FAar:TAar){
+
+    FD <- paste(aar-1,"-08-01",sep="")
+    TD <- paste(aar,"-07-31",sep="")
+
+    Data <- Dogn.Laster(elements = "mean(air_temperature P1D)",start = FD,stop = TD,StNr=StNr)
+    D2 <- cbind(as.numeric(Data[,3]-strptime(FD,format="%Y-%m-%d",tz="UTC"), units = "days"),Data[,4])
+    D2[D2[,2]<0] <- NA
+    D2[,2] <- D2[,2]/D2[,2]*(aar-0.3)
+    lines(c(1,365),c((aar-0.3),(aar-0.3)),col="blue",lwd=2)
+    lines(D2[,1],D2[,2],col="red",lwd=2)
+
+    Data <- Dogn.Laster(elements = "surface_snow_thickness",start = FD,stop = TD,StNr=StNr)
+    Data[Data[,4]<0,4]<-NA
+    D2 <- cbind(as.numeric(Data[,3]-strptime(FD,format="%Y-%m-%d",tz="UTC"), units = "days"),Data[,4])
+    D2[D2[,2]<SLim] <- NA
+    D2[,2] <- D2[,2]/D2[,2]*aar
+    lines(c(1,365),c((aar),(aar)),col="darkgreen",lwd=4)
+    lines(D2[,1],D2[,2],col="antiquewhite",lwd=2)
+
+  }
+  text(10,FAar,"Aug")
+  text(41,FAar,"Sep")
+  text(71,FAar,"Okt")
+  text(103,FAar,"Nov")
+  text(133,FAar,"Des")
+  text(165,FAar,"Jan")
+  text(195,FAar,"Feb")
+  text(223,FAar,"Mar")
+  text(255,FAar,"Apr")
+  text(285,FAar,"Mai")
+  text(316,FAar,"Jun")
+  text(346,FAar,"Jul")
+}
+
+SnoGraf.Klima5 <- function(StNr=18700, FAar=1961,TAar=2018, SLim=1){
+  Resultat <- c()
+  plot(-1000,-1000,xlim = c(0,365),ylim = c(FAar,TAar),xlab="",ylab = "", main=StNr)
+  lines(c(0,0),c(-10,10000))#Aug
+  lines(c(31,31),c(-10,10000))#Aug
+  lines(c(61,61),c(-10,10000))#Sep
+  lines(c(92,92),c(-10,10000))#Okt
+  lines(c(122,122),c(-10,10000))#Nov
+  lines(c(153,153),c(-10,10000),lwd=2)#Des
+  lines(c(184,184),c(-10,10000))#Jan
+  lines(c(212,212),c(-10,10000))#Feb
+  lines(c(244,244),c(-10,10000))#Mar
+  lines(c(274,274),c(-10,10000))#Apr
+  lines(c(305,305),c(-10,10000))#Mai
+  lines(c(335,335),c(-10,10000))#Jun
+  lines(c(365,365),c(-10,10000))#Jun
+  R2 <- c()
+  for(aar in FAar:TAar){
+    FD <- paste(aar-1,"-08-01",sep="")
+    TD <- paste(aar,"-07-31",sep="")
+    Data <- Dogn.Laster(elements = "surface_snow_thickness",start = FD,stop = TD,StNr=StNr)
+    Data[Data[,4]<0,4]<-NA
+    D2 <- cbind(as.numeric(Data[,3]-strptime(FD,format="%Y-%m-%d",tz="UTC"), units = "days"),Data[,4])
+    D2[D2[,2]<SLim] <- NA
+    D2[,2] <- D2[,2]/D2[,2]*aar
+
+    lines(D2[,1],D2[,2],col="blue",lwd=2)
+
+    R2 <- rbind(R2,
+                c(aar,sum(D2[,2],na.rm = T)/aar))
+
+  }
+  lines(R2[,2],R2[,1],col="purple",lwd=2)
+
+  text(10,FAar,"Aug")
+  text(41,FAar,"Sep")
+  text(71,FAar,"Okt")
+  text(103,FAar,"Nov")
+  text(133,FAar,"Des")
+  text(165,FAar,"Jan")
+  text(195,FAar,"Feb")
+  text(223,FAar,"Mar")
+  text(255,FAar,"Apr")
+  text(285,FAar,"Mai")
+  text(316,FAar,"Jun")
+  text(346,FAar,"Jul")
+
+}
+
+SnoGraf.Klima6 <- function(StNr=18700, FAar=1961,TAar=2018, SLim=1){
+  Resultat <- c()
+  plot(-1000,-1000,xlim = c(0,365),ylim = c(FAar,TAar),xlab="",ylab = "", main=StNr)
+  lines(c(0,0),c(-10,10000))#Aug
+  lines(c(31,31),c(-10,10000))#Aug
+  lines(c(61,61),c(-10,10000))#Sep
+  lines(c(92,92),c(-10,10000))#Okt
+  lines(c(122,122),c(-10,10000))#Nov
+  lines(c(153,153),c(-10,10000),lwd=2)#Des
+  lines(c(184,184),c(-10,10000))#Jan
+  lines(c(212,212),c(-10,10000))#Feb
+  lines(c(244,244),c(-10,10000))#Mar
+  lines(c(274,274),c(-10,10000))#Apr
+  lines(c(305,305),c(-10,10000))#Mai
+  lines(c(335,335),c(-10,10000))#Jun
+  lines(c(365,365),c(-10,10000))#Jun
+  R2 <- c()
+  for(aar in FAar:TAar){
+    FD <- paste(aar-1,"-08-01",sep="")
+    TD <- paste(aar,"-07-31",sep="")
+    Data <- Dogn.Laster(elements = "surface_snow_thickness",start = FD,stop = TD,StNr=StNr)
+    Data[Data[,4]<0,4]<-NA
+    D2 <- cbind(as.numeric(Data[,3]-strptime(FD,format="%Y-%m-%d",tz="UTC"), units = "days"),Data[,4])
+    D2[D2[,2]<SLim] <- NA
+    D2[,2] <- D2[,2]/D2[,2]*aar
+
+    R <- c(aar,sum(D2[,2],na.rm = T)/aar)
+    R2 <- rbind(R2,R)
+    PY <- c(R[1]-0.5, R[1]-0.5, R[1]+0.5, R[1]+0.5, R[1]-0.5)
+    PX <- c(0,         R[2],     R[2],      0,         0)
+    polygon(PX,PY,col = "antiquewhite")
+
+    lines(D2[,1],D2[,2],col="blue",lwd=2)
+
+  }
+  #lines(R2[,2],R2[,1],col="purple",lwd=2)
+
+  text(10,FAar,"Aug")
+  text(41,FAar,"Sep")
+  text(71,FAar,"Okt")
+  text(103,FAar,"Nov")
+  text(133,FAar,"Des")
+  text(165,FAar,"Jan")
+  text(195,FAar,"Feb")
+  text(223,FAar,"Mar")
+  text(255,FAar,"Apr")
+  text(285,FAar,"Mai")
+  text(316,FAar,"Jun")
+  text(346,FAar,"Jul")
+
+  R2
+}
+
+SnoGraf.Klima7 <- function(StNr=18700, FAar=1961,TAar=2018, SLim=1){
+  Resultat <- c()
+  AAr<-TAar-FAar
+  plot(-1000,-1000,xlim = c(0,365),ylim = c(0,AAr),
+       xlab="",ylab = "Antalle ganger med snø over grense på gitt dato", main=StNr, xaxp = c(-100,10000,1))
+  polygon(c(-100,-100,3650,3650,-100),c(0,AAr,AAr,0,0),col="DarkGreen")
+  lines(c(0,0),c(-10,10000))#Aug
+  lines(c(31,31),c(-10,10000))#Aug
+  lines(c(61,61),c(-10,10000))#Sep
+  lines(c(92,92),c(-10,10000))#Okt
+  lines(c(122,122),c(-10,10000))#Nov
+  lines(c(153,153),c(-10,10000),lwd=2)#Des
+  lines(c(184,184),c(-10,10000))#Jan
+  lines(c(212,212),c(-10,10000))#Feb
+  lines(c(244,244),c(-10,10000))#Mar
+  lines(c(274,274),c(-10,10000))#Apr
+  lines(c(305,305),c(-10,10000))#Mai
+  lines(c(335,335),c(-10,10000))#Jun
+  lines(c(365,365),c(-10,10000))#Jun
+  R2 <- c()
+  D2 <- c()
+
+  for(aar in FAar:TAar){
+    FD <- paste(aar-1,"-08-01",sep="")
+    TD <- paste(aar,"-07-31",sep="")
+    Data <- Dogn.Laster(elements = "surface_snow_thickness",start = FD,stop = TD,StNr=StNr)
+    Data[Data[,4]<SLim,4]<-0
+    Data[Data[,4]>=SLim,4]<-1
+    D2 <- rbind(D2,Data[1:365,4])
+  }
+  D2[is.na(D2)]<-0
+  R2 <- colSums(D2)
+  lines(1:365,R2)
+  polygon(c(1:365,1),R2[c(1:365,1)],col = "wheat")
+
+  text(10,3,"Aug")
+  text(41,3,"Sep")
+  text(71,3,"Okt")
+  text(103,3,"Nov")
+  text(133,3,"Des")
+  text(165,3,"Jan")
+  text(195,3,"Feb")
+  text(223,3,"Mar")
+  text(255,3,"Apr")
+  text(285,3,"Mai")
+  text(316,3,"Jun")
+  text(346,3,"Jul")
+  R2
+}
+
+SnoGraf.Klima8 <- function(StNr=18700, FAar=1961,TAar=2018, SLim=c(1,10,25)){
+  Resultat <- c()
+  AAr<-TAar-FAar+1
+  plot(-1000,-1000,xlim = c(0,365),ylim = c(0,AAr),
+       xlab="",ylab = "Antalle ganger med snø over grense på gitt dato",
+       main=StNr, xaxp = c(-100,10000,1),
+       sub=paste("01.08.",FAar-1," - 31.07.", TAar, sep="" ))
+  polygon(c(-100,-100,3650,3650,-100),c(0,AAr,AAr,0,0),col="DarkGreen")
+  lines(c(0,0),c(-10,10000))#Aug
+  lines(c(31,31),c(-10,10000))#Aug
+  lines(c(61,61),c(-10,10000))#Sep
+  lines(c(92,92),c(-10,10000))#Okt
+  lines(c(122,122),c(-10,10000))#Nov
+  lines(c(153,153),c(-10,10000),lwd=2)#Des
+  lines(c(184,184),c(-10,10000))#Jan
+  lines(c(212,212),c(-10,10000))#Feb
+  lines(c(244,244),c(-10,10000))#Mar
+  lines(c(274,274),c(-10,10000))#Apr
+  lines(c(305,305),c(-10,10000))#Mai
+  lines(c(335,335),c(-10,10000))#Jun
+  lines(c(365,365),c(-10,10000))#Jun
+  farver <- c("wheat","antiquewhite","snow","white")
+#  R2 <- c()
+  for(n in 1:length(SLim)){
+    D2 <- c()
+    for(aar in FAar:TAar){
+      FD <- paste(aar-1,"-08-01",sep="")
+      TD <- paste(aar,"-07-31",sep="")
+      Data <- Dogn.Laster(elements = "surface_snow_thickness",start = FD,stop = TD,StNr=StNr)
+      Data<-cbind(Data,Data[,4])
+      Data[Data[,4]<SLim[n],4]<-0
+      Data[Data[,4]>=SLim[n],4]<-1
+      D2 <- rbind(D2,Data[1:365,4])
+    }
+    D2[is.na(D2)]<-0
+    R2 <- colSums(D2)
+    lines(1:365,R2)
+    polygon(c(0:365,0),c(0,R2[c(1:365)],0),col = farver[n])
+  }
+  text(10,3,"Aug")
+  text(41,3,"Sep")
+  text(71,3,"Okt")
+  text(103,3,"Nov")
+  text(133,3,"Des")
+  text(165,3,"Jan")
+  text(195,3,"Feb")
+  text(223,3,"Mar")
+  text(255,3,"Apr")
+  text(285,3,"Mai")
+  text(316,3,"Jun")
+  text(346,3,"Jul")
+
+  legend("topleft",
+         legend=c(paste(">=",SLim," cm",sep="")),
+         fill=c(farver[1:length(SLim)]),
+         title="Tegnforklaring")
+  R2
+}
+
+
+
+SoGraf.Snofall <- function(StNr=18700, FAar=1961,TAar=2018){
+  FD <- paste(FAar,"-01-01",sep="")
+  TD <- paste(TAar,"-12-31",sep="") #Kan endres til TAar
+  Data <- Dogn.Laster(elements = "surface_snow_thickness",start = FD,stop = TD,StNr=StNr)
+  LD <- length(Data[,4])
+  SDiff <- Data[,4]-c(NA,Data[1:(LD-1),4])
+  Data <- cbind(Data,SDiff)
+  hist(Data[,5])
+}
+
+
+
 
 
 #rm(list=ls())
