@@ -1,3 +1,5 @@
+
+
 OverUnderplot <- function(StNr=99840, start = "1961-01-01", stop = "2018-04-30", Overskrift=NA){
 
   Data <- Dogn.Laster(StNr=StNr,elements = "mean(air_temperature_anomaly P1M 1961_1990)", start = start, stop = stop,Daglig=F)
@@ -158,9 +160,100 @@ OverUnderplot5 <- function(StNr=99840, start = "1800-01-01", stop = "2100-04-30"
   }
 }
 
+OverUnderplot4Krone <- function(StNr=99840, start = "1800-01-01", stop = "2100-04-30", Overskrift="Svalbard Lufthavn"){
+  
+  Data <- Dogn.Laster(StNr=StNr,elements = "mean(air_temperature_anomaly P1M 1961_1990)", start = start, stop = stop,Daglig=F)
+  LD <- length(Data[,1])
+  if(is.na(Overskrift)){Overskrift <- StNr}
+  plot(-1000,-10000,xlim=c(0.9,12.1),ylim=c(as.numeric(format(Data[1,3],format="%Y")),as.numeric(format(Data[LD,3],format="%Y"))+1),xlab="",ylab="", main=Overskrift, sub="Basert på avvik fra Normalen (1961 - 1990)", lab=c(12,5,7))
+  
+  
+  DMax <- max(Data[,4],na.rm = T)
+  DMin <- min(Data[,4],na.rm = T)
+  DRange <- max(c(DMin,DMax))
+  
+  Data<- cbind(Data, (Data[,4]+0.001)/abs(Data[,4]+0.001)/2+1.5, ceiling(Data[,4]+DRange))
+  #  farver<-c("blue","red")
+  farver <- colorRampPalette(c("darkblue","blue","white","red","darkred"))(2*DRange)
+  LD <- length(Data[,1])
+  teller <- 0
+  for(n in 1:LD){
+    Mnd<-as.numeric(format(Data[n,3],format="%m"))
+    Aar<-as.numeric(format(Data[n,3],format="%Y"))
+    FVerd <- Data[n,5]
+    Verd <- Data[n,4]
+    
+    if(n == 1){teller <- 1; LVerd <- FVerd}
+    if(n > 1){
+      if (FVerd==LVerd){teller <- teller + 1}
+      if (FVerd!=LVerd){teller <- 1}
+      LVerd <- FVerd
+    }
+    
+    
+    PX<-c(Mnd-0.5, Mnd+0.5, Mnd+0.5, Mnd-0.5, Mnd-0.5)
+    PY<-c(Aar-0.5, Aar-0.5, Aar+0.5, Aar+0.5, Aar-0.5)
+    
+    #    polygon(PX,PY,col = farver[FVerd])
+    polygon(PX,PY,col = farver[Data[n,6]])
+    text(Mnd,Aar,teller)
+  }
+  lines(c(11.5,12.5,12.5,4.5,4.5,0.5,0.5,11.5,11.5),
+        c(2009.5,2009.5,2018.5,2018.5,2019.5,2019.5,2010.5,2010.5,2009.5),col="gold",lwd=3)
+#  lines(c(11.5,12.5,12.5,3.5,3.5,0.5,0.5,11.5,11.5),
+#        c(2009.5,2009.5,2018.5,2018.5,2019.5,2019.5,2010.5,2010.5,2009.5),col="gold",lwd=3)
+  polygon(c(2.7,3.3,3.3,3.15,3,2.85,2.7,2.7),
+          c(2019.5,2019.5,2020.3,2020,2020.8,2020,2020.3,2019.5),col="gold")
+}
 
 
 
+OverUnderplot5Ramme <- function(StNr=99840, start = "1800-01-01", stop = "2100-04-30", Overskrift=NA){
+  
+  Data <- Dogn.Laster(StNr=StNr,elements = "mean(air_temperature_anomaly P1M 1961_1990)", start = start, stop = stop,Daglig=F)
+  LD <- length(Data[,1])
+  if(is.na(Overskrift)){Overskrift <- StNr}
+  plot(-1000,-10000,xlim=c(0.9,12.1),ylim=c(Aar<-as.numeric(format(Data[1,3],format="%Y")),Aar<-as.numeric(format(Data[LD,3],format="%Y"))),xlab="",ylab="", main=Overskrift, sub="Basert på avvik fra Normalen (1961 - 1990)", lab=c(12,5,7))
+  
+  
+  DMax <- max(Data[,4],na.rm = T)
+  DMin <- min(Data[,4],na.rm = T)
+  DRange <- max(c(DMin,DMax))
+  
+  Data<- cbind(Data, (Data[,4]+0.001)/abs(Data[,4]+0.001)/2+1.5, ceiling(Data[,4]+DRange))
+  #  farver<-c("blue","red")
+  farver <- colorRampPalette(c("darkblue","blue","white","red","darkred"))(2*DRange)
+  LD <- length(Data[,1])
+  teller <- 0
+  for(n in 1:LD){
+    Mnd<-as.numeric(format(Data[n,3],format="%m"))
+    Aar<-as.numeric(format(Data[n,3],format="%Y"))
+    FVerd <- Data[n,5]
+    Verd <- Data[n,4]
+    
+    if(n == 1){teller <- 1; LVerd <- FVerd}
+    if(n > 1){
+      if (FVerd==LVerd){teller <- teller + 1}
+      if (FVerd!=LVerd){teller <- 1}
+      LVerd <- FVerd
+    }
+    
+    
+    PX<-c(Mnd-0.5, Mnd+0.5, Mnd+0.5, Mnd-0.5, Mnd-0.5)
+    PY<-c(Aar-0.5, Aar-0.5, Aar+0.5, Aar+0.5, Aar-0.5)
+    
+    #    polygon(PX,PY,col = farver[FVerd])
+    polygon(PX,PY,col = farver[Data[n,6]])
+    text(Mnd,Aar,paste(teller, " / ",Data[n,4],sep=""))
+  }
+  lines(c(11.5,12.5,12.5,4.5,4.5,0.5,0.5,11.5,11.5),
+        c(2009.5,2009.5,2018.5,2018.5,2019.5,2019.5,2010.5,2010.5,2009.5),col="gold",lwd=3)
+  #  lines(c(11.5,12.5,12.5,3.5,3.5,0.5,0.5,11.5,11.5),
+  #        c(2009.5,2009.5,2018.5,2018.5,2019.5,2019.5,2010.5,2010.5,2009.5),col="gold",lwd=3)
+  #polygon(c(2.7,3.3,3.3,3.15,3,2.85,2.7,2.7),
+  #        c(2019.5,2019.5,2020.3,2020,2020.8,2020,2020.3,2019.5),col="gold")
+  
+}
 
 
 
