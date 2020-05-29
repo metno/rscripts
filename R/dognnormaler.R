@@ -19,7 +19,7 @@ Lag.Dogn.Normal <- function(S){
   for (mnd in 1:12){#Sjekker avvik mot dataene
     siste.sjekk[mnd,1:6] <- c(mnd,dagnr[1,mnd+6]+1,dagnr[2,mnd+6],dagnr[3,mnd+6],S[mnd],mean(dogn.normal[(dagnr[1,mnd+6]+1):dagnr[3,mnd+6]]))
     siste.sjekk[mnd,7] <- siste.sjekk[mnd,6] - siste.sjekk[mnd,5]}
-  print(siste.sjekk)#Skriver ut kontrollen på skjermen
+  #print(siste.sjekk)#Skriver ut kontrollen på skjermen
   
   dogn.normal
 }
