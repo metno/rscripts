@@ -1,5 +1,5 @@
 
-#register_google(key="AIzaSyAcpkXcEV9cGmF0NsvGQw30NmJTQiHkwnU",write = T) Skaff din egen API-key til Googlemaps
+#register_google(key="<Skaff din egen API-key til Googlemaps>",write = T) Skaff din egen API-key til Googlemaps
 require(RgoogleMaps)
 
 Lynkart <- function(center= c(61, 8),zoom=6, StartDato = "11.07.2020",Dager=7){
