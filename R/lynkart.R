@@ -2,7 +2,7 @@
 #register_google(key="<Skaff din egen API-key til Googlemaps>",write = T) Skaff din egen API-key til Googlemaps
 require(RgoogleMaps)
 
-Lynkart <- function(center= c(61, 8),zoom=6, StartDato = "11.07.2020",Dager=7){
+Lynkart <- function(center= c(61, 8),zoom=6, StartDato = "11.07.2020",Dager=7, BareBakke=T){
   
   Kart <- GetMap(center=center, zoom=zoom, destfile = "kart.png")
   tmp <- PlotOnStaticMap(Kart, lat = 0, lon = 0, destfile = "Kart1.png", cex=1.5,pch=20, add=FALSE)
@@ -16,12 +16,13 @@ Lynkart <- function(center= c(61, 8),zoom=6, StartDato = "11.07.2020",Dager=7){
     try(Data <- read.table(Lenke,sep=" ",dec=".",header=F),silent = T)
     #https://frost.met.no/lightning/v0.ualf?referencetime=2020-07-28%2F2020-07-29
     if(length(Data>0)){
+      if (BareBakke){Data <- Data[Data[,22]==0,]}
       tmp <- PlotOnStaticMap(Kart, lat = Data[,9], lon = Data[,10], destfile = "Kart1.png",pch=20, add=TRUE)
     }
   }
 }
 
-Lynkart.farve <- function(center= c(61, 8),zoom=6, StartDato = "11.07.2020",Dager=7,MndNavn=T){
+Lynkart.farve <- function(center= c(61, 8),zoom=6, StartDato = "11.07.2020",Dager=7,MndNavn=T, BareBakke=T){
   
   Kart <- GetMap(center=center, zoom=zoom, destfile = "kart.png")
   tmp <- PlotOnStaticMap(Kart, lat = 0, lon = 0, destfile = "Kart1.png", cex=1.5,pch=20, add=FALSE)
@@ -37,6 +38,7 @@ Lynkart.farve <- function(center= c(61, 8),zoom=6, StartDato = "11.07.2020",Dage
     try(Data <- read.table(Lenke,sep=" ",dec=".",header=F),silent = T)
     #https://frost.met.no/lightning/v0.ualf?referencetime=2020-07-28%2F2020-07-29
     if(length(Data>0)){
+      if (BareBakke){Data <- Data[Data[,22]==0,]}
       tmp <- PlotOnStaticMap(Kart, lat = Data[,9], lon = Data[,10], destfile = "Kart1.png",pch=20, add=TRUE, col=farver[Data[,3]])
     }
     Maaneder=c("Januar","Februar","Mars","April","Mai","Juni","Juli","August","September","Oktober","November","Desember")
