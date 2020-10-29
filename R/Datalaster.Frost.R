@@ -27,7 +27,7 @@ Data.Laster <- function(start = "2017-01-01",
                       "&referencetime=", start_date, "/", stop_date,
                       "&elements=", paste(elements,collapse=","),
                       sep = "", collapse= "")
-  if(Daglig){url<-paste(url,"&timeresolutions=P1D",sep="")}
+  if(Daglig){url<-paste(url,"&timeresolutions=P1D&timeoffsets=default&levels=default",sep="")}
 
 
   system.time({
