@@ -11,7 +11,7 @@ Dgn.Laster <- function(StNr=18700,start="1990-01-01",slutt="2100-12-31",elemente
   Datoer<-paste(start,"/",slutt,sep="")
   Del3 <- "&elements="
   #mean(air_temperature%20P1M)
-  Del4 <-"&levels=default&timeoffsets=default&fields=sourceId,referenceTime,value,elementId"
+  Del4 <-"&levels=default&timeoffsets=default&levels=default&fields=sourceId,referenceTime,value,elementId"
   URL<-paste(URL,Bruker,Del1,StNr,Del2,Datoer,Del3,elementer,Del4,sep="")
   print(URL)
   Data <- read.table(URL,header=T,sep=",",dec=".")
@@ -31,7 +31,7 @@ Mnd.Laster <- function(StNr=18700,start="1800-01-01",slutt="2100-12-31",elemente
   Datoer<-paste(start,"/",slutt,sep="")
   Del3 <- "/P1Y&elements="
   #mean(air_temperature%20P1M)
-  Del4 <-"&levels=default&timeoffsets=default&fields=sourceId,referenceTime,value,elementId"
+  Del4 <-"&levels=default&timeoffsets=default&levels=default&fields=sourceId,referenceTime,value,elementId"
   URL<-paste(URL,Bruker,Del1,StNr,Del2,Datoer,Del3,elementer,Del4,sep="")
   #print(URL)
   Data <- read.table(URL,header=T,sep=",",dec=".")
