@@ -13,7 +13,7 @@ Dgn.Laster <- function(StNr=18700,start="1990-01-01",slutt="2100-12-31",elemente
   #mean(air_temperature%20P1M)
   Del4 <-"&levels=default&timeoffsets=default&levels=default&fields=sourceId,referenceTime,value,elementId"
   URL<-paste(URL,Bruker,Del1,StNr,Del2,Datoer,Del3,elementer,Del4,sep="")
-  #print(URL)
+  print(URL)
   Data <- read.table(URL,header=T,sep=",",dec=".")
   Data <- cbind(as.numeric(substr(Data[,2],1,4)),as.numeric(substr(Data[,2],6,7)),as.numeric(substr(Data[,2],9,10)),Data[,3])
   Data
