@@ -2,7 +2,7 @@
 
 #Døgn
 #https://ca076a66-7ea1-4ca2-8eaf-f091899a9eba:f8413549-8f24-4ce1-8154-e5a2c85e553c@frost.met.no/observations/v0.csv?sources=sn700&referencetime=2008-01-01/2008-01-05&elements=mean(air_temperature%20P1D)&levels=default&timeoffsets=default&fields=sourceId,referenceTime,value,elementId
-Dgn.Laster <- function(StNr=18700,start="1990-01-01",slutt="2100-12-31",elementer="mean(air_temperature%20P1D)"){
+Dgn.Laster <- function(StNr=18700,start="1990-01-01",slutt="2100-12-31",elementer="mean(air_temperature%20P1D)",PU=F){
   URL="https://"
   Bruker <- "ca076a66-7ea1-4ca2-8eaf-f091899a9eba:f8413549-8f24-4ce1-8154-e5a2c85e553c"
   Del1 <- "@frost.met.no/observations/v0.csv?sources=sn"
@@ -13,7 +13,7 @@ Dgn.Laster <- function(StNr=18700,start="1990-01-01",slutt="2100-12-31",elemente
   #mean(air_temperature%20P1M)
   Del4 <-"&levels=default&timeoffsets=default&levels=default&fields=sourceId,referenceTime,value,elementId"
   URL<-paste(URL,Bruker,Del1,StNr,Del2,Datoer,Del3,elementer,Del4,sep="")
-  print(URL)
+  if(PU){print(URL)}
   Data <- read.table(URL,header=T,sep=",",dec=".")
   Data <- cbind(as.numeric(substr(Data[,2],1,4)),as.numeric(substr(Data[,2],6,7)),as.numeric(substr(Data[,2],9,10)),Data[,3])
   Data
