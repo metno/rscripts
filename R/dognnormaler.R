@@ -1,4 +1,6 @@
 #Programmer og snutter for å lage døgnnormaler
+#library(devtools)
+#source_url("https://raw.githubusercontent.com/metno/rscripts/master/R/dognnormaler.R")
 
 Lag.Dogn.Normal <- function(S){
   #Funksjonen kjøres ved at du skriver Lag.Dogn.Normal(Normal)  Der Normal er en vektor med 12 månedverdier fra januar til desember
