@@ -1,4 +1,4 @@
-setwd("~/Rscript/RegionStatus")
+#setwd("~/Rscript/RegionStatus")
 source("RegionHenter.R")
 
 RegStatus <- function(Data = NA, TAM = F, RR = T, Reg=0, Aar = 2022, Mnd=11, Prog=T, NormPeriode = c(1991,2020) ){
@@ -38,9 +38,9 @@ RegStatus.TempRegn <- function(Data, Reg=0, Aar = 2022, Mnd=11, Prog=T, NormPeri
   #print(Reg)
   if (Reg == 0){Regionnavn <- "GR0 - Norge"}
   #print("A")
-  if (Reg == 1){Regionnavn <- "GR1 - Østlandet"}
+  if (Reg == 1){Regionnavn <- "GR1 - Ã˜stlandet"}
   #print("A")
-  if (Reg == 2){Regionnavn <- "GR2 - Sørlandet"}
+  if (Reg == 2){Regionnavn <- "GR2 - SÃ¸rlandet"}
   #print("A")
   if (Reg == 3){Regionnavn <- "GR3 - Vestlandet"}
   #print("A")
@@ -67,7 +67,7 @@ RegStatus.TempRegn <- function(Data, Reg=0, Aar = 2022, Mnd=11, Prog=T, NormPeri
   
   TR <- range(T2[,2:13],na.rm=T)
   RR <- range(R2[,2:13],na.rm=T)
-  plot(T2[,13],R2[,13], pch=16, col="gray", ylab="Nedbør mm", xlab="Temperatur C", main=Regionnavn)
+  plot(T2[,13],R2[,13], pch=16, col="gray", ylab="NedbÃ¸r mm", xlab="Temperatur C", main=Regionnavn)
   polygon(TN[c(3,1,1,3,3),12],RN[c(3,3,1,1,3),12],col=rgb(0,0,1,0.5))
   
   if(Prog){
@@ -152,9 +152,9 @@ RegStatus.Plotter <- function(D2,D3,Normal,Reg=0, Aar=2022,Prog=T,TAM=T,RR=T){
   #print(Reg)
   if (Reg == 0){Regionnavn <- "GR0 - Norge"}
   #print("A")
-  if (Reg == 1){Regionnavn <- "GR1 - Østlandet"}
+  if (Reg == 1){Regionnavn <- "GR1 - Ã˜stlandet"}
   #print("A")
-  if (Reg == 2){Regionnavn <- "GR2 - Sørlandet"}
+  if (Reg == 2){Regionnavn <- "GR2 - SÃ¸rlandet"}
   #print("A")
   if (Reg == 3){Regionnavn <- "GR3 - Vestlandet"}
   #print("A")
@@ -164,7 +164,7 @@ RegStatus.Plotter <- function(D2,D3,Normal,Reg=0, Aar=2022,Prog=T,TAM=T,RR=T){
   #print("A")
   
   
-  plot(-1000000,-1000000,xlim=c(1,12),ylim=MR,xlab="",ylab="Nedbør",xaxt = "n",main=Regionnavn)
+  plot(-1000000,-1000000,xlim=c(1,12),ylim=MR,xlab="",ylab="NedbÃ¸r",xaxt = "n",main=Regionnavn)
   #print("A")
   axis(1, at = c(1,2,3,4,5,6,7,8,9,10,11,12),
        labels = c("Jan","Feb","Mar","Apr","Mai","Jun","Jul","Aug","Sep","Oct","Nov","Dec"))
