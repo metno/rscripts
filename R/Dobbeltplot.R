@@ -2,10 +2,12 @@
 #require(devtools)
 #source_url("https://raw.githubusercontent.com/metno/rscripts/master/R/Dobbeltplot.R")
 
+#Bruk rownames for å sette navn på radene, f.eks. stasjonsvan og colnames for å sette navn på variablene
 
 Dobbeltplot <- function(Datasett=NA, Overskrift="Testplot", Fyllfarve="gray"){
   #Generere eksempeldata 
   if(is.na(Datasett)){
+    #Kjør de neste linjene direkte i R for å se strukthuren på datasettet
     Y1 <- c(1:5)
     Y2 <- c(2,4,3,1,5)*10
     Datasett <- cbind(Y1,Y2)
