@@ -1,3 +1,7 @@
+#Lastes rett i R ved
+#require(devtools)
+#source_url("https://raw.githubusercontent.com/metno/rscripts/master/R/Dobbeltplot.R")
+
 
 Dobbeltplot <- function(Datasett=NA, Overskrift="Testplot", Fyllfarve="gray"){
   #Generere eksempeldata 
@@ -8,7 +12,7 @@ Dobbeltplot <- function(Datasett=NA, Overskrift="Testplot", Fyllfarve="gray"){
     colnames(Datasett) <- c("Variabel 1","Variabel 2")
     rownames(Datasett) <- c("Tekst1","Tekst2","Tekst3","Tekst4","Tekst5")
   }
-  #Start av plottefunksjon, først litt datahåndtering
+  #Start av plottefunksjon, fÃ¸rst litt datahÃ¥ndtering
   X <- c(1:length(Datasett[,1]))
   LX <- length(X)
   Y1 <- Datasett[,1]
@@ -27,7 +31,7 @@ Dobbeltplot <- function(Datasett=NA, Overskrift="Testplot", Fyllfarve="gray"){
     polygon(c(X[n]-0.4,X[n]-0.4,X[n]+0.4,X[n]+0.4,X[n]-0.4),c(0,Y1[n],Y1[n],0,0),col=Fyllfarve)
   }
   
-  #Legger på strek og prikk (Y2)
+  #Legger pÃ¥ strek og prikk (Y2)
   par(new = TRUE)
   plot(X, Y2, xlim=c(xgrenser[1]-0.5,xgrenser[2]+0.5), ylim = c(0,max(Y2)), pch = 16,              # Create second plot without axes
        axes = FALSE, xlab = "", ylab = "", type="b")
