@@ -6,7 +6,7 @@
 
 Dobbeltplot <- function(Datasett=NA, Overskrift="Testplot", Fyllfarve="gray",Y2min0=F){
   #Generere eksempeldata 
-  if(is.na(Datasett)){
+  if(is.na(Datasett[1])){
     #Kjør de neste linjene direkte i R for å se strukthuren på datasettet
     Y1 <- c(1:5)
     Y2 <- c(2,4,3,1,5)*10
