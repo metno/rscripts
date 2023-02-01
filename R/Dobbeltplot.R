@@ -4,7 +4,7 @@
 
 #Bruk "rownames" for å sette navn på radene, f.eks. stasjonsvan og "colnames" for å sette navn på variablene
 
-Dobbeltplot <- function(Datasett=NA, Overskrift="Testplot", Fyllfarve="gray"){
+Dobbeltplot <- function(Datasett=NA, Overskrift="Testplot", Fyllfarve="gray",Y2min0=F){
   #Generere eksempeldata 
   if(is.na(Datasett)){
     #Kjør de neste linjene direkte i R for å se strukthuren på datasettet
@@ -20,13 +20,15 @@ Dobbeltplot <- function(Datasett=NA, Overskrift="Testplot", Fyllfarve="gray"){
   Y1 <- Datasett[,1]
   Y2 <- Datasett[,2]
   xgrenser <- range(X)
+  Y2Grenser <- range(Y2)
+  if(Y2min0){Y2Grenser[1]<-0}
   
   #Definerer rammer for plottet
   par(mar = c(5, 4, 4, 4) + 0.3)              # Additional space for second y-axis
   plot(NA,NA,
        ylim=c(0,max(Y1)),xlim=c(xgrenser[1]-0.5,xgrenser[2]+0.5),
        xlab="",ylab=colnames(Datasett)[1],main=Overskrift, xaxt = "n")
-  axis(1, at = c(1:5), labels = rownames(Datasett))
+  axis(1, at = c(1:LX), labels = rownames(Datasett))
   
   #plotter histogrammet
   for (n in 1:LX){
@@ -35,7 +37,7 @@ Dobbeltplot <- function(Datasett=NA, Overskrift="Testplot", Fyllfarve="gray"){
   
   #Legger på strek og prikk (Y2)
   par(new = TRUE)
-  plot(X, Y2, xlim=c(xgrenser[1]-0.5,xgrenser[2]+0.5), ylim = c(0,max(Y2)), pch = 16,              # Create second plot without axes
+  plot(X, Y2, xlim=c(xgrenser[1]-0.5,xgrenser[2]+0.5), ylim = c(range(Y2)), pch = 16,              # Create second plot without axes
        axes = FALSE, xlab = "", ylab = "", type="b")
   axis(side = 4, at = pretty(range(Y2)))      # Add second axis
   mtext(colnames(Datasett)[2], side = 4, line = 3)             # Add second axis label
