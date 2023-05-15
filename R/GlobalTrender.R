@@ -3,6 +3,7 @@
 Trender <- function(Lengder = 15){
   GData <- read.csv("http://data.giss.nasa.gov/gistemp/tabledata_v4/GLB.Ts+dSST.csv",na.strings = c("***","****"),colClasses = "numeric", skip=1)[,c(1,14)]
   plot(GData[,1],GData[,2],pch=".",ylab="Temperaturavvik",xlab="",main=paste("Globale temperaturtrender for perioder på ", Lengder, " år.", sep="" ))
+  legend("topleft",lty=1,col=c("darkred","darkgreen","darkblue"),legend = c("Stigende","Nøytral","Synkende"))
   TAar <- 0
   Aar <- range(GData[,1])
   FAar <- Aar[1]
