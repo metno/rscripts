@@ -12,7 +12,7 @@ DUT <- function(Kommune="KS301",Winter=T){
     Tittel <- paste("Design temperature winter for ", Kommune, sep="")
     plass = "topright"
   }
-  plot(DUTtest[,4],DUTtest[,2],pch=16,col=farver[DUTtest[,1]],
+  plot(Datasett[,4],Datasett[,2],pch=16,col=farver[Datasett[,1]],
        ylab="Temperature",xlab = "Return period (years)", main=Tittel)
   legend(plass, legend=c("1 day","2 day","3 day","4 day","5 day"), col=farver, pch=16)
   Datasett
