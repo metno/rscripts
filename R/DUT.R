@@ -4,11 +4,11 @@ DUT <- function(Kommune="KS301",Winter=T){
   #fromJSON("https://frost-beta.met.no/api/v1/reports/get?type=dut&settings=%7B%22SourceID%22%3A%22KS301%22%7D")
   URL <- paste("https://frost-beta.met.no/api/v1/reports/get?type=dut&settings=%7B%22SourceID%22%3A%22",Kommune,"%22%7D",sep="")
   DUTdata <- fromJSON(URL)
-  Datasett <-  DUTOslo$data$summer
+  Datasett <-  DUTdata$data$summer
   Tittel <- paste("Design temperature summer for ", Kommune, sep="")
   plass = "bottomright"
   if(Winter){
-    Datasett <-  DUTOslo$data$winter
+    Datasett <-  DUTdata$data$winter
     Tittel <- paste("Design temperature winter for ", Kommune, sep="")
     plass = "topright"
   }
