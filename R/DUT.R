@@ -1,5 +1,7 @@
 library(jsonlite)
 
+#Funksjon som henter ut DUT for en gitt kommune. Kallet er kommunenummeret med KS forra, Oslo er KS301 Velg mellom sommer og vinter vad å sette T eller F på Winter.
+
 DUT <- function(Kommune="KS301",Winter=T){
   #fromJSON("https://frost-beta.met.no/api/v1/reports/get?type=dut&settings=%7B%22SourceID%22%3A%22KS301%22%7D")
   URL <- paste("https://frost-beta.met.no/api/v1/reports/get?type=dut&settings=%7B%22SourceID%22%3A%22",Kommune,"%22%7D",sep="")
