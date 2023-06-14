@@ -228,7 +228,7 @@ RegionHenter <- function(){
   Aar <- as.numeric(substr(df2[,2],1,4))
   Mnd <- as.numeric(substr(df2[,2],6,7))
   Dag <- as.numeric(substr(df2[,2],9,10))
-  Elem <- as.numeric(gsub("PT","",gsub("H","",df2[,5])))/6
+  Elem <- as.numeric(gsub("PT","",gsub("H","",df2[,6])))/6
   
   Resultat <- cbind(Reg,Elem,Aar,Mnd,Dag,Verd)
   #plot(1:12, Resultat[Resultat[,3]==1999 & Resultat[,2]==1 & Resultat[,1]==0,6])
