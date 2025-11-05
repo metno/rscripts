@@ -4,7 +4,7 @@ library(jsonlite)
 
 DUT <- function(Kommune="KS301",Winter=T){
   #fromJSON("https://frost-beta.met.no/api/v1/reports/get?type=dut&settings=%7B%22SourceID%22%3A%22KS301%22%7D")
-  URL <- paste("https://frost-beta.met.no/api/v1/reports/get?type=dut&settings=%7B%22SourceID%22%3A%22",Kommune,"%22%7D",sep="")
+  URL <- paste("https://ca076a66-7ea1-4ca2-8eaf-f091899a9eba:f8413549-8f24-4ce1-8154-e5a2c85e553c@frost-beta.met.no/api/v1/reports/get?type=dut&settings=%7B%22SourceID%22%3A%22",Kommune,"%22%7D",sep="")
   DUTdata <- fromJSON(URL)
   Datasett <-  DUTdata$data$summer
   Tittel <- paste("Design temperature summer for ", Kommune, sep="")
